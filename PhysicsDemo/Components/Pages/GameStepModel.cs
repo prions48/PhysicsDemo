@@ -1,0 +1,25 @@
+public class GameStepModel
+{
+    public Guid ID { get; set; }
+    public int Time { get; set; }
+    public int Force { get; set; }
+    public double Acceleration { get; set; }
+    public double Velocity { get; set; }
+    public double Position { get; set; }
+    public GameStepModel(GameStepModel model, int force, double mass, int t)
+    {
+        Time = model.Time + t;
+        Force = force;
+        Acceleration = force / mass;
+        Velocity = model.Velocity + Acceleration * t;
+        Position = model.Position + model.Velocity * t + Acceleration * 0.5 * t * t;
+    }
+    public GameStepModel()
+    {
+        Time = 0;
+        Force = 0;
+        Acceleration = 0;
+        Velocity = 0;
+        Position = 0;
+    }
+}
