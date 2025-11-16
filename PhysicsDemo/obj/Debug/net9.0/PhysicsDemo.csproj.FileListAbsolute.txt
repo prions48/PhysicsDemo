@@ -208,3 +208,4 @@
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/PhysicsDemo.pdb
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/PhysicsDemo.genruntimeconfig.cache
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/ref/PhysicsDemo.dll
+/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/PhysicsDemo.sourcelink.json

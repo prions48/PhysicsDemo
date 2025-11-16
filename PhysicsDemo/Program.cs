@@ -7,6 +7,7 @@ using PhysicsDemo.Data.Email;
 using PhysicsDemo.Data.Files;
 using PhysicsDemo.Data.Users;
 using Microsoft.EntityFrameworkCore;
+using PhysicsDemo.Data.GameData;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,8 @@ builder.Services.AddScoped<FileService>();
 builder.Services.AddDbContext<UserContext>(o => o.UseSqlServer(builder.Configuration["ConnectionStrings:SQL"]));
 builder.Services.AddScoped<UserService>();
 
+builder.Services.AddDbContext<PhysicsContext>(o => o.UseSqlServer(builder.Configuration["ConnectionStrings:SQL"]));
+builder.Services.AddScoped<PhysicsService>();
 
 var app = builder.Build();
 
