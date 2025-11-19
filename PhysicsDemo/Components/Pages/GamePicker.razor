@@ -1,0 +1,167 @@
+@page "/{GameID:guid?}"
+@inject ISnackbar Snackbar
+@using PhysicsDemo.Data.GameData
+@inject PhysicsService physicsService
+@if (User != null)
+{
+    @if (SelectedGame == null)
+    {
+        <MudTabs>
+            <MudTabPanel Text="Create New Game">
+                <MudStack>
+                    <MudTextField @bind-Value="PlayerName" Label="Your Name" />
+                    <MudNumericField HideSpinButtons @bind-Value="NumPlayers" Label="# Players" Min="2" Max="6" />
+                    <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="CreateGame" Disabled="NumPlayers == null || string.IsNullOrWhiteSpace(PlayerName)">Create Game</MudButton>
+                </MudStack>
+            </MudTabPanel>
+            <MudTabPanel Text="Join Existing Game">
+                <MudTextField @bind-Value="PlayerName" Label="Your Name" />
+                <MudTextField @bind-Value="JoinCode" Label="Enter Code" />
+                <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="JoinGame" Disabled="string.IsNullOrEmpty(JoinCode) || JoinCode.Length != 6 || string.IsNullOrWhiteSpace(PlayerName)">Join Game</MudButton>
+            </MudTabPanel>
+            <MudTabPanel Text="Continue Game">
+                <MudTable Items="Games.Where(e => e.GameEnd == null)" Striped Bordered>
+                    <ToolBarContent>
+                        <MudText>All Open Games</MudText>
+                    </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh>Code</MudTh>
+                        <MudTh>Started</MudTh>
+                        <MudTh>Ended</MudTh>
+                        <MudTh># Players</MudTh>
+                        <MudTh>Rejoin</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd>@context.JoinCode</MudTd>
+                        <MudTd>@context.GameStart.ToString("MM/dd/yy")</MudTd>
+                        <MudTd>@context.GameEnd?.ToString("MM/dd/yy")</MudTd>
+                        <MudTd>@context.NumPlayers</MudTd>
+                        <MudTd>
+                            @if (context.GameEnd == null)
+                            {
+                                <MudIconButton Icon="@Icons.Material.TwoTone.PlayCircle" OnClick="() => SelectedGame = context" Color="Color.Info" />
+                            }
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </MudTabPanel>
+            <MudTabPanel Text="Your Games">
+                <MudTable Items="Games.Where(e =>  e.CreatorID == User.UserID && (e.GameEnd == null || ShowCompleted))" Striped Bordered>
+                <ToolBarContent>
+                    <MudText>Your Games</MudText>
+                    <MudSpacer />
+                    <MudCheckBox @bind-Value="ShowCompleted">Show Completed</MudCheckBox>
+                </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh>Status</MudTh>
+                        <MudTh>Started</MudTh>
+                        <MudTh>Ended</MudTh>
+                        <MudTh># Players</MudTh>
+                        <MudTh>Rejoin</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd>@(context.GameEnd == null ? "In Progress" : "Ended")</MudTd>
+                        <MudTd>@context.GameStart.ToString("MM/dd/yy")</MudTd>
+                        <MudTd>@context.GameEnd?.ToString("MM/dd/yy")</MudTd>
+                        <MudTd>@context.NumPlayers</MudTd>
+                        <MudTd>
+                            @if (context.GameEnd == null)
+                            {
+                                <MudIconButton Icon="@Icons.Material.TwoTone.PlayCircle" OnClick="() => SelectedGame = context" Color="Color.Info" />
+                            }
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </MudTabPanel>
+        </MudTabs>
+    }
+    else
+    {
+        @if (SelectedGame.NumPlayers == SelectedGame.Players.Count)
+        {
+            <GameEngine SelectedGame="SelectedGame" User="User" />
+        }
+        else
+        {
+            <MudStack>
+                <MudAlert Severity="Severity.Warning">Waiting for players to join</MudAlert>
+                <MudProgressLinear Indeterminate />
+                <MudText Typo="Typo.h3">Join Code: @SelectedGame.JoinCode</MudText>
+                <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="Refresh">Refresh</MudButton>
+            </MudStack>
+        }
+    }
+}
+else
+{
+    <MudProgressCircular Indeterminate />
+    <MudText>Loading... If not logged in, please do so</MudText>
+}
+
+@code {
+    [CascadingParameter] public Auth0User? User { get; set; }
+    [Parameter] public Guid? GameID { get; set; }
+    private bool loaded = false;
+    private bool urlload = false;
+    private string? PlayerName { get; set; } = null;
+    List<PhysicsGame> Games { get; set; } = [];
+    PhysicsGame? SelectedGame { get; set; } = null;
+    protected override void OnParametersSet()
+    {
+        if (!loaded && User != null)
+        {
+            Games = physicsService.GetGamesByUser(User.UserID).OrderByDescending(e => e.GameStart).ToList();
+            PlayerName = User.UserName;
+            loaded = true;
+        }
+        if (GameID != null && !urlload)
+        {
+            SelectedGame = Games.FirstOrDefault(e => e.ID == GameID);
+            urlload = true;
+        }
+    }
+    private int? NumPlayers = null;
+    private bool ShowCompleted { get; set; } = false;
+    private void CreateGame()
+    {
+        if (NumPlayers == null || User == null)
+            return;
+        PhysicsGame game = new PhysicsGame()
+        {
+            CreatorID = User!.UserID,
+            NumPlayers = NumPlayers.Value,
+            GameStart = DateTime.Now,
+        };
+        game.Players = [new() { GameID = game.ID, PlayerID = game.CreatorID, PlayerName=PlayerName }];
+        physicsService.CreateGame(game);
+        Games.Add(game);
+        SelectedGame = game;
+    }
+    private string? JoinCode { get; set; } = null;
+    private void JoinGame()
+    {
+        if (string.IsNullOrEmpty(JoinCode) || JoinCode.Length != 6 || User == null)
+            return;
+        PhysicsGame? game = physicsService.GetGameByCode(JoinCode);
+        if (game == null)
+        {
+            Snackbar.Add("Game code not found!", Severity.Error);
+        }
+        else if (game.NumPlayers == game.Players.Count)
+        {
+            Snackbar.Add("That game is full!", Severity.Warning);
+        }
+        else
+        {
+            PhysicsPlayer newplayer = new() { GameID = game.ID, PlayerID = User.UserID, PlayerName=PlayerName };
+            physicsService.CreatePlayer(newplayer);
+            game.Players.Add(newplayer);
+            SelectedGame = game;
+        }
+    }
+    private void Refresh()
+    {
+        if (SelectedGame != null)
+            SelectedGame = physicsService.GetGameByID(SelectedGame.ID);
+    }
+}

@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("73f52179-03ef-4096-9ea6-3934712df0dd")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("PhysicsDemo")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e42af155c964bbdc20f67f0b88bb8801b691fd06")]
 [assembly: System.Reflection.AssemblyProductAttribute("PhysicsDemo")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PhysicsDemo")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

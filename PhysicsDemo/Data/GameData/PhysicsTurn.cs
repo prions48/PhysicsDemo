@@ -4,7 +4,7 @@ namespace PhysicsDemo.Data.GameData
 {
     public class PhysicsTurn
     {
-        [Key] public Guid ID { get; set; }
+        [Key] public Guid ID { get; set; } = Guid.NewGuid();
         public Guid GameID { get; set; }
         public Guid PlayerID { get; set; }
         public int RoundNumber { get; set; }

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "a6OscxSRbI8q+IcBl3rS2WBsDt+/B8kmdksv+f59uQI=",
+  "Hash": "cX2x0kmnIRQJpIEMszScerPyFyrA+ZTB4e/5VKQErY4=",
   "Source": "PhysicsDemo",
   "BasePath": "_content/PhysicsDemo",
   "Mode": "Default",
@@ -17,10 +17,10 @@
   ],
   "Assets": [
     {
-      "Identity": "/Users/prions/.nuget/packages/mudblazor/7.15.0/staticwebassets/MudBlazor.min.css",
+      "Identity": "/Users/prions/.nuget/packages/mudblazor/8.14.0/staticwebassets/MudBlazor.min.css",
       "SourceId": "MudBlazor",
       "SourceType": "Package",
-      "ContentRoot": "/Users/prions/.nuget/packages/mudblazor/7.15.0/staticwebassets/",
+      "ContentRoot": "/Users/prions/.nuget/packages/mudblazor/8.14.0/staticwebassets/",
       "BasePath": "_content/MudBlazor",
       "RelativePath": "MudBlazor.min.css",
       "AssetKind": "All",
@@ -31,17 +31,17 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "mhumzvqd1g",
-      "Integrity": "2gItJ0j/o5RSWg7VYqCOBpSPI1dxTOG+mnEzWt7EvYw=",
+      "Fingerprint": "guyn7gvjye",
+      "Integrity": "KGcaExjPdLVQUK4LLvcVezhWrWHUpbcKNRc2A3KmGPU=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "/Users/prions/.nuget/packages/mudblazor/7.15.0/staticwebassets/MudBlazor.min.css"
+      "OriginalItemSpec": "/Users/prions/.nuget/packages/mudblazor/8.14.0/staticwebassets/MudBlazor.min.css"
     },
     {
-      "Identity": "/Users/prions/.nuget/packages/mudblazor/7.15.0/staticwebassets/MudBlazor.min.js",
+      "Identity": "/Users/prions/.nuget/packages/mudblazor/8.14.0/staticwebassets/MudBlazor.min.js",
       "SourceId": "MudBlazor",
       "SourceType": "Package",
-      "ContentRoot": "/Users/prions/.nuget/packages/mudblazor/7.15.0/staticwebassets/",
+      "ContentRoot": "/Users/prions/.nuget/packages/mudblazor/8.14.0/staticwebassets/",
       "BasePath": "_content/MudBlazor",
       "RelativePath": "MudBlazor.min.js",
       "AssetKind": "All",
@@ -52,14 +52,14 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "rnojub5shy",
-      "Integrity": "lz0Xidl9yw53lEeYs4XMU39zSRQzpCIyWOQSAG0/0GU=",
+      "Fingerprint": "f96y5mhlyw",
+      "Integrity": "zR6goaoMpR/YVMMSTfCmVNo3kuPgOkjF/ovhkUhAkbk=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "/Users/prions/.nuget/packages/mudblazor/7.15.0/staticwebassets/MudBlazor.min.js"
+      "OriginalItemSpec": "/Users/prions/.nuget/packages/mudblazor/8.14.0/staticwebassets/MudBlazor.min.js"
     },
     {
-      "Identity": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/compressed/0wz98yz2xy-rnojub5shy.gz",
+      "Identity": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/compressed/0wz98yz2xy-f96y5mhlyw.gz",
       "SourceId": "MudBlazor",
       "SourceType": "Package",
       "ContentRoot": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/compressed/",
@@ -70,14 +70,14 @@
       "AssetRole": "Alternative",
       "AssetMergeBehavior": "",
       "AssetMergeSource": "",
-      "RelatedAsset": "/Users/prions/.nuget/packages/mudblazor/7.15.0/staticwebassets/MudBlazor.min.js",
+      "RelatedAsset": "/Users/prions/.nuget/packages/mudblazor/8.14.0/staticwebassets/MudBlazor.min.js",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "1qy6usn0ca",
-      "Integrity": "t8zRtLCrHv+/DVEEUNrm/WrOhDAYaoXyvMCUFNDbwhE=",
+      "Fingerprint": "xh22veyt71",
+      "Integrity": "JVDJTWuo+T9Qq3RRY+Js15CJE985GPi18TyEe1VMi0k=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "/Users/prions/.nuget/packages/mudblazor/7.15.0/staticwebassets/MudBlazor.min.js"
+      "OriginalItemSpec": "/Users/prions/.nuget/packages/mudblazor/8.14.0/staticwebassets/MudBlazor.min.js"
     },
     {
       "Identity": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/compressed/3lpdzrlp95-6pdc2jztkx.gz",
@@ -920,7 +920,7 @@
       "OriginalItemSpec": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.css.map"
     },
     {
-      "Identity": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/compressed/tzxjg6is5z-mhumzvqd1g.gz",
+      "Identity": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/compressed/tzxjg6is5z-guyn7gvjye.gz",
       "SourceId": "MudBlazor",
       "SourceType": "Package",
       "ContentRoot": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/compressed/",
@@ -931,14 +931,14 @@
       "AssetRole": "Alternative",
       "AssetMergeBehavior": "",
       "AssetMergeSource": "",
-      "RelatedAsset": "/Users/prions/.nuget/packages/mudblazor/7.15.0/staticwebassets/MudBlazor.min.css",
+      "RelatedAsset": "/Users/prions/.nuget/packages/mudblazor/8.14.0/staticwebassets/MudBlazor.min.css",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "wbh9bl8niu",
-      "Integrity": "/F6KryuNsnkqR7FRlBkBBr8IHWkoS6URECAJ3IK0OmA=",
+      "Fingerprint": "8bic9wmsh6",
+      "Integrity": "TI8ouIpZBO/fPui1hENOetYwALMnWe5ylF4Th787MNI=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "/Users/prions/.nuget/packages/mudblazor/7.15.0/staticwebassets/MudBlazor.min.css"
+      "OriginalItemSpec": "/Users/prions/.nuget/packages/mudblazor/8.14.0/staticwebassets/MudBlazor.min.css"
     },
     {
       "Identity": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/compressed/u9qe6k0axu-kbrnm935zg.gz",
@@ -2099,7 +2099,7 @@
   "Endpoints": [
     {
       "Route": "_content/MudBlazor/MudBlazor.min.css",
-      "AssetFile": "/Users/prions/.nuget/packages/mudblazor/7.15.0/staticwebassets/MudBlazor.min.css",
+      "AssetFile": "/Users/prions/.nuget/packages/mudblazor/8.14.0/staticwebassets/MudBlazor.min.css",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -2107,8 +2107,12 @@
           "Value": "bytes"
         },
         {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
           "Name": "Content-Length",
-          "Value": "580975"
+          "Value": "607782"
         },
         {
           "Name": "Content-Type",
@@ -2116,32 +2120,28 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"2gItJ0j/o5RSWg7VYqCOBpSPI1dxTOG+mnEzWt7EvYw=\""
+          "Value": "\"KGcaExjPdLVQUK4LLvcVezhWrWHUpbcKNRc2A3KmGPU=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 29 Oct 2024 20:30:12 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
+          "Value": "Wed, 05 Nov 2025 03:43:55 GMT"
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-2gItJ0j/o5RSWg7VYqCOBpSPI1dxTOG+mnEzWt7EvYw="
+          "Value": "sha256-KGcaExjPdLVQUK4LLvcVezhWrWHUpbcKNRc2A3KmGPU="
         }
       ]
     },
     {
       "Route": "_content/MudBlazor/MudBlazor.min.css",
-      "AssetFile": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/compressed/tzxjg6is5z-mhumzvqd1g.gz",
+      "AssetFile": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/compressed/tzxjg6is5z-guyn7gvjye.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000015997440"
+          "Quality": "0.000015304092"
         }
       ],
       "ResponseHeaders": [
@@ -2151,15 +2151,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "62509"
+          "Value": "65341"
         },
         {
           "Name": "ETag",
-          "Value": "\"/F6KryuNsnkqR7FRlBkBBr8IHWkoS6URECAJ3IK0OmA=\""
+          "Value": "\"TI8ouIpZBO/fPui1hENOetYwALMnWe5ylF4Th787MNI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 29 Oct 2024 20:30:12 GMT"
+          "Value": "Wed, 05 Nov 2025 03:43:54 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2179,19 +2179,19 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"2gItJ0j/o5RSWg7VYqCOBpSPI1dxTOG+mnEzWt7EvYw=\""
+          "Value": "W/\"KGcaExjPdLVQUK4LLvcVezhWrWHUpbcKNRc2A3KmGPU=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-2gItJ0j/o5RSWg7VYqCOBpSPI1dxTOG+mnEzWt7EvYw="
+          "Value": "sha256-KGcaExjPdLVQUK4LLvcVezhWrWHUpbcKNRc2A3KmGPU="
         }
       ]
     },
     {
       "Route": "_content/MudBlazor/MudBlazor.min.css.gz",
-      "AssetFile": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/compressed/tzxjg6is5z-mhumzvqd1g.gz",
+      "AssetFile": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/compressed/tzxjg6is5z-guyn7gvjye.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -2200,7 +2200,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "62509"
+          "Value": "65341"
         },
         {
           "Name": "Content-Type",
@@ -2208,11 +2208,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"/F6KryuNsnkqR7FRlBkBBr8IHWkoS6URECAJ3IK0OmA=\""
+          "Value": "\"TI8ouIpZBO/fPui1hENOetYwALMnWe5ylF4Th787MNI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 29 Oct 2024 20:30:12 GMT"
+          "Value": "Wed, 05 Nov 2025 03:43:54 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2230,13 +2230,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-/F6KryuNsnkqR7FRlBkBBr8IHWkoS6URECAJ3IK0OmA="
+          "Value": "sha256-TI8ouIpZBO/fPui1hENOetYwALMnWe5ylF4Th787MNI="
         }
       ]
     },
     {
-      "Route": "_content/MudBlazor/MudBlazor.min.js",
-      "AssetFile": "/Users/prions/.nuget/packages/mudblazor/7.15.0/staticwebassets/MudBlazor.min.js",
+      "Route": "_content/MudBlazor/MudBlazor.min.f96y5mhlyw.js",
+      "AssetFile": "/Users/prions/.nuget/packages/mudblazor/8.14.0/staticwebassets/MudBlazor.min.js",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -2244,8 +2244,12 @@
           "Value": "bytes"
         },
         {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
           "Name": "Content-Length",
-          "Value": "49823"
+          "Value": "75407"
         },
         {
           "Name": "Content-Type",
@@ -2253,32 +2257,118 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"lz0Xidl9yw53lEeYs4XMU39zSRQzpCIyWOQSAG0/0GU=\""
+          "Value": "\"zR6goaoMpR/YVMMSTfCmVNo3kuPgOkjF/ovhkUhAkbk=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 29 Oct 2024 20:30:12 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
+          "Value": "Wed, 05 Nov 2025 03:43:55 GMT"
         }
       ],
       "EndpointProperties": [
         {
+          "Name": "fingerprint",
+          "Value": "f96y5mhlyw"
+        },
+        {
           "Name": "integrity",
-          "Value": "sha256-lz0Xidl9yw53lEeYs4XMU39zSRQzpCIyWOQSAG0/0GU="
+          "Value": "sha256-zR6goaoMpR/YVMMSTfCmVNo3kuPgOkjF/ovhkUhAkbk="
+        },
+        {
+          "Name": "label",
+          "Value": "_content/MudBlazor/MudBlazor.min.js"
+        }
+      ]
+    },
+    {
+      "Route": "_content/MudBlazor/MudBlazor.min.guyn7gvjye.css",
+      "AssetFile": "/Users/prions/.nuget/packages/mudblazor/8.14.0/staticwebassets/MudBlazor.min.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "607782"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"KGcaExjPdLVQUK4LLvcVezhWrWHUpbcKNRc2A3KmGPU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 05 Nov 2025 03:43:55 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "guyn7gvjye"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-KGcaExjPdLVQUK4LLvcVezhWrWHUpbcKNRc2A3KmGPU="
+        },
+        {
+          "Name": "label",
+          "Value": "_content/MudBlazor/MudBlazor.min.css"
         }
       ]
     },
     {
       "Route": "_content/MudBlazor/MudBlazor.min.js",
-      "AssetFile": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/compressed/0wz98yz2xy-rnojub5shy.gz",
+      "AssetFile": "/Users/prions/.nuget/packages/mudblazor/8.14.0/staticwebassets/MudBlazor.min.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "75407"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"zR6goaoMpR/YVMMSTfCmVNo3kuPgOkjF/ovhkUhAkbk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 05 Nov 2025 03:43:55 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-zR6goaoMpR/YVMMSTfCmVNo3kuPgOkjF/ovhkUhAkbk="
+        }
+      ]
+    },
+    {
+      "Route": "_content/MudBlazor/MudBlazor.min.js",
+      "AssetFile": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/compressed/0wz98yz2xy-f96y5mhlyw.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000093773443"
+          "Quality": "0.000060591372"
         }
       ],
       "ResponseHeaders": [
@@ -2288,15 +2378,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "10663"
+          "Value": "16503"
         },
         {
           "Name": "ETag",
-          "Value": "\"t8zRtLCrHv+/DVEEUNrm/WrOhDAYaoXyvMCUFNDbwhE=\""
+          "Value": "\"JVDJTWuo+T9Qq3RRY+Js15CJE985GPi18TyEe1VMi0k=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 29 Oct 2024 20:30:12 GMT"
+          "Value": "Wed, 05 Nov 2025 03:43:54 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2316,19 +2406,19 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"lz0Xidl9yw53lEeYs4XMU39zSRQzpCIyWOQSAG0/0GU=\""
+          "Value": "W/\"zR6goaoMpR/YVMMSTfCmVNo3kuPgOkjF/ovhkUhAkbk=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-lz0Xidl9yw53lEeYs4XMU39zSRQzpCIyWOQSAG0/0GU="
+          "Value": "sha256-zR6goaoMpR/YVMMSTfCmVNo3kuPgOkjF/ovhkUhAkbk="
         }
       ]
     },
     {
       "Route": "_content/MudBlazor/MudBlazor.min.js.gz",
-      "AssetFile": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/compressed/0wz98yz2xy-rnojub5shy.gz",
+      "AssetFile": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Debug/net9.0/compressed/0wz98yz2xy-f96y5mhlyw.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -2337,7 +2427,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "10663"
+          "Value": "16503"
         },
         {
           "Name": "Content-Type",
@@ -2345,11 +2435,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"t8zRtLCrHv+/DVEEUNrm/WrOhDAYaoXyvMCUFNDbwhE=\""
+          "Value": "\"JVDJTWuo+T9Qq3RRY+Js15CJE985GPi18TyEe1VMi0k=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 29 Oct 2024 20:30:12 GMT"
+          "Value": "Wed, 05 Nov 2025 03:43:54 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2367,7 +2457,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-t8zRtLCrHv+/DVEEUNrm/WrOhDAYaoXyvMCUFNDbwhE="
+          "Value": "sha256-JVDJTWuo+T9Qq3RRY+Js15CJE985GPi18TyEe1VMi0k="
         }
       ]
     },
@@ -15888,7 +15978,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 16 Nov 2025 01:52:50 GMT"
+          "Value": "Wed, 19 Nov 2025 02:30:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -15941,7 +16031,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 16 Nov 2025 01:52:50 GMT"
+          "Value": "Wed, 19 Nov 2025 02:30:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -15978,7 +16068,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 16 Nov 2025 01:52:50 GMT"
+          "Value": "Wed, 19 Nov 2025 02:30:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -16025,7 +16115,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 16 Nov 2025 01:52:50 GMT"
+          "Value": "Wed, 19 Nov 2025 02:30:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -16078,7 +16168,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 16 Nov 2025 01:52:50 GMT"
+          "Value": "Wed, 19 Nov 2025 02:30:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -16115,7 +16205,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 16 Nov 2025 01:52:50 GMT"
+          "Value": "Wed, 19 Nov 2025 02:30:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -16162,7 +16252,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 16 Nov 2025 01:52:50 GMT"
+          "Value": "Wed, 19 Nov 2025 02:30:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -16223,7 +16313,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 16 Nov 2025 01:52:50 GMT"
+          "Value": "Wed, 19 Nov 2025 02:30:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -16268,7 +16358,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 16 Nov 2025 01:52:50 GMT"
+          "Value": "Wed, 19 Nov 2025 02:30:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -16323,7 +16413,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 16 Nov 2025 01:52:50 GMT"
+          "Value": "Wed, 19 Nov 2025 02:30:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -16384,7 +16474,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 16 Nov 2025 01:52:50 GMT"
+          "Value": "Wed, 19 Nov 2025 02:30:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -16429,7 +16519,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 16 Nov 2025 01:52:50 GMT"
+          "Value": "Wed, 19 Nov 2025 02:30:00 GMT"
         },
         {
           "Name": "Cache-Control",

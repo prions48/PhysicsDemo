@@ -1,3 +1,5 @@
+using PhysicsDemo.Data.GameData;
+
 public class GameStepModel
 {
     public Guid ID { get; set; }
@@ -21,5 +23,13 @@ public class GameStepModel
         Acceleration = 0;
         Velocity = 0;
         Position = 0;
+    }
+    public GameStepModel(GameStepModel model, PhysicsTurn turn)
+    {
+        Time = turn.RoundNumber;
+        Acceleration = turn.TurnValue;
+        Force = (int)Acceleration;
+        Velocity = model.Velocity + Acceleration;
+        Position = model.Position + model.Velocity + Acceleration * 0.5;
     }
 }

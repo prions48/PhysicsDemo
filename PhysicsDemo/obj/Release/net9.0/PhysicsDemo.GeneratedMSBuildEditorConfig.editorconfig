@@ -3,12 +3,20 @@ build_property.MudDebugAnalyzer =
 build_property.MudAllowedAttributePattern = 
 build_property.MudAllowedAttributeList = 
 build_property.TargetFramework = net9.0
+build_property.TargetFramework = net9.0
+build_property.TargetPlatformMinVersion = 
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
 build_property.ProjectTypeGuids = 
 build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
 build_property.PlatformNeutralAssembly = 
 build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = PhysicsDemo
 build_property.RootNamespace = PhysicsDemo
@@ -27,6 +35,10 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9BcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/prions/Coding/PhysicsDemo/PhysicsDemo/Components/Pages/AuthStuff.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BdXRoU3R1ZmYucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/prions/Coding/PhysicsDemo/PhysicsDemo/Components/Pages/Counter.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Db3VudGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
@@ -35,12 +47,32 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9FcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/prions/Coding/PhysicsDemo/PhysicsDemo/Components/Pages/Files.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9GaWxlcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/prions/Coding/PhysicsDemo/PhysicsDemo/Components/Pages/GameEngine.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9HYW1lRW5naW5lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/prions/Coding/PhysicsDemo/PhysicsDemo/Components/Pages/GamePicker.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9HYW1lUGlja2VyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/prions/Coding/PhysicsDemo/PhysicsDemo/Components/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ib21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/prions/Coding/PhysicsDemo/PhysicsDemo/Components/Pages/Weather.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9XZWF0aGVyLnJhem9y
+[/Users/prions/Coding/PhysicsDemo/PhysicsDemo/Components/Pages/LogInOut.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Mb2dJbk91dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/prions/Coding/PhysicsDemo/PhysicsDemo/Components/Pages/ThemeMode.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9UaGVtZU1vZGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/prions/Coding/PhysicsDemo/PhysicsDemo/Components/Pages/TImerPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9USW1lclBhZ2UucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/prions/Coding/PhysicsDemo/PhysicsDemo/Components/Routes.razor]
@@ -54,7 +86,3 @@ build_metadata.AdditionalFiles.CssScope =
 [/Users/prions/Coding/PhysicsDemo/PhysicsDemo/Components/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvTWFpbkxheW91dC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-e7yywdtl3h
-
-[/Users/prions/Coding/PhysicsDemo/PhysicsDemo/Components/Layout/NavMenu.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvTmF2TWVudS5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = b-8nxzb7453a
