@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using PhysicsDemo.Data.GameData;
 
 public class GameStepModel
@@ -6,6 +7,7 @@ public class GameStepModel
     public int Time { get; set; }
     public int Force { get; set; }
     public double Acceleration { get; set; }
+    public List<double> DoubleAcc => [Acceleration, Acceleration];
     public double Velocity { get; set; }
     public double Position { get; set; }
     public GameStepModel(GameStepModel model, int force, double mass, int t)

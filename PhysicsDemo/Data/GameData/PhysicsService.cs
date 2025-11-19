@@ -39,7 +39,7 @@ namespace PhysicsDemo.Data.GameData
             List<PhysicsTurn> turns = _context.PhysicsTurns.Where(e => gameid == e.GameID).ToList();
             foreach (PhysicsPlayer player in game.Players)
             {
-                player.Turns = turns.Where(e => e.PlayerID == player.ID).OrderBy(e => e.RoundNumber).ToList();
+                player.Turns = turns.Where(e => e.PlayerID == player.PlayerID).OrderBy(e => e.RoundNumber).ToList();
             }
             return RecalcGame(game);
         }

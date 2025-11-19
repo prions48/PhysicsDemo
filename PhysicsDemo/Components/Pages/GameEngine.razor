@@ -3,38 +3,50 @@
 @inject PhysicsService physicsService
 
 <MudButton OnClick="Refresh" Color="Color.Primary" Variant="Variant.Filled">Refresh</MudButton>
-<MudSimpleTable Striped Bordered>
-    <thead>
-        <tr>
-            <th>Time</th>
-            <th>Force</th>
-            <th>Acceleration</th>
-            <th>Velocity</th>
-            <th>Position</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>@(TurnNumber)</td>
-            <td>
-                <MudNumericField @bind-Value="NewForce" Label="Force" Style="width:200px;" Immediate />
-            </td>
-            <td colspan="3">
-                <MudButton Color="Color.Info" Variant="Variant.Filled" Disabled="!NewForce.HasValue || TurnNumber == MyMoves!.MaxTurn" OnClick="AddMove">Next Step</MudButton>
-            </td>
-        </tr>
-        @foreach (GameStepModel model in MyMoves!.Steps.OrderByDescending(e => e.Time))
-        {
-            <tr>
-                <td>@model.Time</td>
-                <td>@model.Force.ToString()</td>
-                <td>@model.Acceleration.ToString("N1")</td>
-                <td>@model.Velocity.ToString("N1")</td>
-                <td>@model.Position.ToString("N1")</td>
-            </tr>
-        }
-    </tbody>
-</MudSimpleTable>
+<MudTabs>
+    <MudTabPanel Text="My Moves">
+        <MudSimpleTable Striped Bordered>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Force</th>
+                    <th>Acceleration</th>
+                    <th>Velocity</th>
+                    <th>Position</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@(TurnNumber)</td>
+                    <td>
+                        <MudNumericField @bind-Value="NewForce" Label="Force" Style="width:200px;" Immediate />
+                    </td>
+                    <td colspan="3">
+                        <MudButton Color="Color.Info" Variant="Variant.Filled" Disabled="!NewForce.HasValue || TurnNumber == MyMoves!.MaxTurn" OnClick="AddMove">Next Step</MudButton>
+                    </td>
+                </tr>
+                @foreach (GameStepModel model in MyMoves!.Steps.OrderByDescending(e => e.Time))
+                {
+                    <tr>
+                        <td>@model.Time</td>
+                        <td>@model.Force.ToString()</td>
+                        <td>@model.Acceleration.ToString("N1")</td>
+                        <td>@model.Velocity.ToString("N1")</td>
+                        <td>@model.Position.ToString("N1")</td>
+                    </tr>
+                }
+            </tbody>
+        </MudSimpleTable>
+    </MudTabPanel>
+    <MudTabPanel Text="Graphs">
+        <MudStack>
+            <MudChart ChartType="ChartType.Line" ChartSeries="AccData" ChartOptions="_accoptions"></MudChart>
+            <MudChart ChartType="ChartType.Line" ChartSeries="VecData" ChartOptions="_vecoptions"></MudChart>
+            <MudChart ChartType="ChartType.Line" ChartSeries="PosData" ChartOptions="_posoptions"></MudChart>
+        </MudStack>
+    </MudTabPanel>
+</MudTabs>
+
 
 @code {
     [Parameter, EditorRequired] public Auth0User User { get; set; }
@@ -47,11 +59,7 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        TurnNumber = SelectedGame.CurrentRound;
-        foreach (PhysicsPlayer player in SelectedGame.Players)
-        {
-            Moves.Add(new UserMoves() { UserID = player.PlayerID, UserName = player.PlayerName ?? "Unknown", Steps = RecalculateSteps(player.Turns) });
-        }
+        Refresh();
     }
     private void Refresh()
     {
@@ -60,24 +68,41 @@
         {
             TurnNumber = SelectedGame.CurrentRound;
             Moves = [];
+            AccData.Clear();
+            VecData.Clear();
+            PosData.Clear();
             foreach (PhysicsPlayer player in SelectedGame.Players)
             {
-                Moves.Add(new UserMoves() { UserID = player.PlayerID, UserName = player.PlayerName ?? "Unknown", Steps = RecalculateSteps(player.Turns) });
+                Moves.Add(new UserMoves() { UserID = player.PlayerID, UserName = player.PlayerName ?? "Unknown", Steps = RecalculateSteps(player) });
             }
             SelectedGame = game;
+            NewForce = null;
         }
         else
         {
             Snackbar.Add("Game not found, please wait and retry.", Severity.Error);
         }
     }
-    private List<GameStepModel> RecalculateSteps(List<PhysicsTurn> turns)
+    private List<GameStepModel> RecalculateSteps(PhysicsPlayer player)
     {
+        List<PhysicsTurn> turns = player.Turns;
         List<GameStepModel> models = [new GameStepModel()];
         foreach (PhysicsTurn turn in turns)
         {
             models.Add(new(models.Last(),turn));
         }
+        ChartSeries newseries1 = new();
+        ChartSeries newseries2 = new();
+        ChartSeries newseries3 = new();
+        newseries1.Name = player.PlayerName + " Acceleration";
+        newseries1.Data = models.Select(e => e.Acceleration).ToArray();
+        newseries2.Name = player.PlayerName + " Velocity";
+        newseries2.Data = models.Select(e => e.Velocity).ToArray();
+        newseries3.Name = player.PlayerName + " Position";
+        newseries3.Data = models.Select(e => e.Position).ToArray();
+        AccData.Add(newseries1);
+        VecData.Add(newseries2);
+        PosData.Add(newseries3);
         return models;
     }
     private void AddMove()
@@ -94,7 +119,8 @@
         };
         physicsService.CreateTurn(turn);
         MyPlayer.Turns.Add(turn);
-        MyMoves.Steps.Add(new(MyMoves.Steps.Last(),turn));
+        //MyMoves.Steps.Add(new(MyMoves.Steps.Last(),turn));
+        Refresh();
     }
     public class UserMoves
     {
@@ -103,5 +129,13 @@
         public List<GameStepModel> Steps { get; set; } = [];
         public int MaxTurn => Steps.Count == 0 ? 0 : Steps.Select(e => e.Time).Max();
     }
+    #region Graphs
+    private ChartOptions _accoptions = new() { YAxisTicks=1, XAxisLines=true, YAxisLines=true};
+    private ChartOptions _vecoptions = new() { YAxisTicks=3, XAxisLines=true, YAxisLines=true};
+    private ChartOptions _posoptions = new() { YAxisTicks=10, XAxisLines=true, YAxisLines=true};
+    private List<ChartSeries> AccData { get; set; } = new();
+    private List<ChartSeries> VecData { get; set; } = new();
+    private List<ChartSeries> PosData { get; set; } = new();
+    #endregion
     
 }
