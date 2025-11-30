@@ -3,6 +3,15 @@
 @inject PhysicsService physicsService
 
 <MudStack Row AlignItems="AlignItems.Center">
+    <MudText Style="font-weight: bold;">@SelectedGame.JoinCode</MudText>
+    @if (SelectedGame.MidPoint.HasValue)
+    {
+        <MudChip Color="SelectedGame.Players.Any(e => e.PassedMidpoint == true) ? Color.Info : Color.Default" T="string">Midpoint: @SelectedGame.MidPoint.ToString()</MudChip>
+    }
+    @if (SelectedGame.EndPoint.HasValue)
+    {
+        <MudChip Color="SelectedGame.Players.Any(e => e.PassedEndpoint == true) ? Color.Success : Color.Default" T="string">Endpoint: @SelectedGame.EndPoint.ToString()</MudChip>
+    }
     <MudButton OnClick="Refresh" Color="Color.Primary" Variant="Variant.Filled">Refresh</MudButton>
     <MudToggleIconButton Color="Color.Error" ToggledColor="Color.Info" @bind-Toggled="Positive" 
     Icon="@Icons.Material.Filled.ArrowCircleLeft" ToggledIcon="@Icons.Material.Filled.ArrowCircleRight"></MudToggleIconButton>
