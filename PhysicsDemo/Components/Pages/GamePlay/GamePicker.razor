@@ -214,6 +214,10 @@ else
         {
             Snackbar.Add("That game is full!", Severity.Warning);
         }
+        else if (game.Players.Any(e => e.PlayerID == User.UserID))
+        {
+            Snackbar.Add("You are already in that game.", Severity.Warning);
+        }
         else
         {
             PhysicsPlayer newplayer = new() { GameID = game.ID, PlayerID = User.UserID, PlayerName=PlayerName, GuestPlayer=false };
@@ -238,6 +242,14 @@ else
         }
         else
         {
+            List<PhysicsPlayer> players = game.Players.Where(e => e.GuestPlayer).ToList();
+            List<PhysicsGuestUser> users = physicsService.GetGuestUsers(players.Select(e => e.PlayerID).ToHashSet());
+            PhysicsGuestUser? user = users.FirstOrDefault(e => e.Passcode == GuestPin);
+            if (user != null)
+            {
+                Snackbar.Add("That game already has a guest player using that PIN.", Severity.Warning);
+                return;
+            }
             GuestUser.Passcode = GuestPin;
             GuestUser.PlayerName = PlayerName ?? "";
             physicsService.CreateGuestPlayer(GuestUser);
