@@ -153,9 +153,19 @@ namespace PhysicsDemo.Data.GameData
             _context.PhysicsPlayers.Add(game.Players.First());
             _context.SaveChanges();
         }
+        public void UpdateGame(PhysicsGame game)
+        {
+            _context.PhysicsGames.Update(game);
+            _context.SaveChanges();
+        }
         public void CreatePlayer(PhysicsPlayer player)
         {
             _context.PhysicsPlayers.Add(player);
+            _context.SaveChanges();
+        }
+        public void UpdatePlayer(PhysicsPlayer player)
+        {
+            _context.PhysicsPlayers.Update(player);
             _context.SaveChanges();
         }
         public void RemovePlayer(PhysicsPlayer player)

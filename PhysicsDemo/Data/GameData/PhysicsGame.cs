@@ -14,6 +14,9 @@ namespace PhysicsDemo.Data.GameData
         public DateTime? GameEnd { get; set; }
         public Guid? WinningPlayerID { get; set; }
         public string? WinningPlayerName { get; set; }
+        public int StartPoint { get; set; } = 0;
+        public int? MidPoint { get; set; }
+        public int? EndPoint { get; set; }
         //Yes I know I should use navigation properties, I'm having a busy weekend
         [NotMapped] public List<PhysicsPlayer> Players { get; set; } = [];
         [NotMapped] public List<PhysicsTurn> Turns => Players.SelectMany(e => e.Turns).ToList();

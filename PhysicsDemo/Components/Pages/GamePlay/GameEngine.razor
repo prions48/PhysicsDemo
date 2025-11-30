@@ -2,7 +2,12 @@
 @inject ISnackbar Snackbar
 @inject PhysicsService physicsService
 
-<MudButton OnClick="Refresh" Color="Color.Primary" Variant="Variant.Filled">Refresh</MudButton>
+<MudStack Row AlignItems="AlignItems.Center">
+    <MudButton OnClick="Refresh" Color="Color.Primary" Variant="Variant.Filled">Refresh</MudButton>
+    <MudToggleIconButton Color="Color.Error" ToggledColor="Color.Info" @bind-Toggled="Positive" 
+    Icon="@Icons.Material.Filled.ArrowCircleLeft" ToggledIcon="@Icons.Material.Filled.ArrowCircleRight"></MudToggleIconButton>
+    <MudText>Direction: @(Positive ? "Right" : "Left")</MudText>
+</MudStack>
 <MudTabs>
     <MudTabPanel Text="My Moves">
         <MudSimpleTable Striped Bordered>
@@ -19,7 +24,7 @@
                 <tr>
                     <td>@(TurnNumber)</td>
                     <td>
-                        <MudNumericField @bind-Value="NewForce" Label="Force" Style="width:200px;" Immediate />
+                        <MudNumericField @bind-Value="NewForce" Label="Force" Style="width:200px;" Min="0" Immediate />
                     </td>
                     <td colspan="3">
                         <MudButton Color="Color.Info" Variant="Variant.Filled" Disabled="!NewForce.HasValue || TurnNumber == MyMoves!.MaxTurn" OnClick="AddMove">Next Step</MudButton>
@@ -55,11 +60,17 @@
     private PhysicsPlayer? MyPlayer => SelectedGame.Players.FirstOrDefault(e => e.PlayerID == User.UserID);
     private UserMoves? MyMoves => Moves.FirstOrDefault(e => e.UserID == User.UserID);
     private int TurnNumber { get; set; } = 1;
+    private bool Positive { get; set; } = true;
+    private int DirectionFactor => Positive ? 1 : -1;
     private int? NewForce { get; set; } = null;
     protected override void OnInitialized()
     {
         base.OnInitialized();
         Refresh();
+        if (MyMoves != null)
+        {
+            Positive = MyMoves.Steps.LastOrDefault()?.Acceleration >= 0;
+        }
     }
     private void Refresh()
     {
@@ -73,7 +84,50 @@
             PosData.Clear();
             foreach (PhysicsPlayer player in SelectedGame.Players)
             {
-                Moves.Add(new UserMoves() { UserID = player.PlayerID, UserName = player.PlayerName ?? "Unknown", Steps = RecalculateSteps(player) });
+                UserMoves moves = new UserMoves() { UserID = player.PlayerID, UserName = player.PlayerName ?? "Unknown", Steps = RecalculateSteps(player) };
+                int? midindex = null;
+                if (game.MidPoint != null)
+                {
+                    for (int i = 0; i < moves.Steps.Count; i++)
+                    {
+                        if (moves.Steps[i].Position >= game.MidPoint)
+                        {
+                            midindex = i;
+                            player.PassedMidpoint = true;
+                            physicsService.UpdatePlayer(player);
+                            break;
+                        }
+                    }
+                }
+                if (game.EndPoint != null && midindex != null)
+                {
+                    for (int i = midindex.Value+1; i < moves.Steps.Count; i++)
+                    {
+                        if (moves.Steps[i].Position <= game.EndPoint)
+                        {
+                            //a winner is you (or someone)
+                            player.PassedEndpoint = true;
+                            physicsService.UpdatePlayer(player);
+                            if (game.GameEnd == null)
+                            {
+                                game.GameEnd = DateTime.Now;
+                                physicsService.UpdateGame(game);
+                            }
+                            break;
+                        }
+                    }
+                }
+                Moves.Add(moves);
+            }
+            if (game.GameEnd != null)
+            {
+                List<PhysicsPlayer> players = game.Players.Where(e => e.PassedEndpoint == true).ToList();
+                if (players.Count == 1)
+                {
+                    game.WinningPlayerID = players.First()!.PlayerID;
+                    physicsService.UpdateGame(game);
+                    Snackbar.Add(players.First().PlayerName + " has won the game!", Severity.Success);
+                }
             }
             SelectedGame = game;
             NewForce = null;
@@ -114,7 +168,7 @@
             GameID = SelectedGame.ID,
             PlayerID = User.UserID,
             CreatedTimeStamp = DateTime.Now,
-            TurnValue = NewForce.Value,
+            TurnValue = NewForce.Value * DirectionFactor,
             RoundNumber = TurnNumber
         };
         physicsService.CreateTurn(turn);

@@ -8,6 +8,9 @@ CREATE TABLE PhysicsGames (
     GameEnd DATETIME NULL,
     WinningPlayerID UNIQUEIDENTIFIER NULL,
     WinningPlayerName NVARCHAR(1000) NULL,
+    StartPoint INT NOT NULL CONSTRAINT DF_PhysicsGames_StartPoint DEFAULT 0,
+    MidPoint INT NULL,
+    EndPoint INT NULL,
     PRIMARY KEY (ID)
 );
 CREATE TABLE PhysicsPlayers (
@@ -16,6 +19,8 @@ CREATE TABLE PhysicsPlayers (
     PlayerID UNIQUEIDENTIFIER NOT NULL,
     PlayerName NVARCHAR(1000) NULL,
     GuestPlayer BIT NOT NULL CONSTRAINT DF_PhysicsPlayers_GuestPlayer DEFAULT 0,
+    PassedMidpoint BIT NULL,
+    PassedEndpoint BIT NULL,
     PRIMARY KEY (ID)
 );
 CREATE TABLE PhysicsTurns (

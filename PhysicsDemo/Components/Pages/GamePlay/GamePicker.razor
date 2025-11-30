@@ -12,6 +12,11 @@
                 <MudStack>
                     <MudTextField @bind-Value="PlayerName" Label="Your Name" />
                     <MudNumericField HideSpinButtons @bind-Value="NumPlayers" Label="# Players" Min="2" Max="6" />
+                    <MudStack Row>
+                        <MudNumericField HideSpinButtons @bind-Value="StartPt" Label="Start" />
+                        <MudNumericField HideSpinButtons @bind-Value="MidPt" Label="Midpoint" />
+                        <MudNumericField HideSpinButtons @bind-Value="EndPt" Label="Finish Line" />
+                    </MudStack>
                     <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="CreateGame" Disabled="NumPlayers == null || string.IsNullOrWhiteSpace(PlayerName)">Create Game</MudButton>
                 </MudStack>
             </MudTabPanel>
@@ -195,6 +200,9 @@ else
             CreatorID = User!.UserID,
             NumPlayers = NumPlayers.Value,
             GameStart = DateTime.Now,
+            StartPoint = StartPt,
+            MidPoint = MidPt,
+            EndPoint = EndPt
         };
         game.Players = [new() { GameID = game.ID, PlayerID = game.CreatorID, PlayerName=PlayerName }];
         physicsService.CreateGame(game);
@@ -298,4 +306,7 @@ else
         if (SelectedGame != null)
             SelectedGame = physicsService.GetGameByID(SelectedGame.ID);
     }
+    private int StartPt { get; set; } = 0;
+    private int? MidPt { get; set; } = 100;
+    private int? EndPt { get; set; } = 0;
 }
