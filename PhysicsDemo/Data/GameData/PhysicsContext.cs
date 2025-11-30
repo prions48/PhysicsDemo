@@ -11,5 +11,6 @@ namespace PhysicsDemo.Data.GameData
         public DbSet<PhysicsGame> PhysicsGames { get; set; }
         public DbSet<PhysicsPlayer> PhysicsPlayers { get; set; }
         public DbSet<PhysicsTurn> PhysicsTurns { get; set; }
+        public DbSet<PhysicsGuestUser> PhysicsGuestUsers { get; set; }
     }
 }

@@ -6,7 +6,7 @@
 {
     @if (SelectedGame == null)
     {
-        <MudTabs>
+        <MudTabs @bind-ActivePanelIndex="activePanel">
             <MudTabPanel Text="Create New Game">
                 <MudStack>
                     <MudTextField @bind-Value="PlayerName" Label="Your Name" />
@@ -94,8 +94,49 @@
 }
 else
 {
-    <MudProgressCircular Indeterminate />
-    <MudText>Loading... If not logged in, please do so</MudText>
+    @if (GuestUser == null)
+    {
+        <MudStack Row>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="Account/Login">Log In</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="PlayGuest">Play as Guest</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="RejoinGuest">Rejoin Game as Guest</MudButton>
+        </MudStack>
+    }
+    else
+    {
+        @if (Rejoin)
+        {
+            <MudTextField @bind-Value="JoinCode" Label="Join Code for game" Immediate />
+            <MudTextField @bind-Value="GuestPin" Label="Use your PIN to rejoin" MaxLength="8" Immediate />
+            <MudStack Row>
+                <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="Cancel">Cancel</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="RejoinGameAsGuest"
+                    Disabled="JoinCode?.Length != 6 || string.IsNullOrWhiteSpace(GuestPin)">Rejoin Existing Game</MudButton>
+            </MudStack>
+        }
+        else if (SelectedGame == null)
+        {
+            <MudStack>
+                <MudTextField @bind-Value="JoinCode" Label="Join Code for game" Immediate />
+                <MudTextField @bind-Value="PlayerName" Label="Your Player Name" MaxLength="8" Immediate />
+                <MudTextField @bind-Value="GuestPin" Label="Create a PIN to join" MaxLength="8" Immediate />
+                <MudStack Row>
+                    <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="Cancel">Cancel</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="JoinGameAsGuest"
+                    Disabled="JoinCode?.Length != 6 || string.IsNullOrWhiteSpace(PlayerName)
+                    || string.IsNullOrWhiteSpace(GuestPin)">Join Existing Game</MudButton>
+                </MudStack>
+            </MudStack>
+        }
+        else if (GuestUser != null)
+        {
+            <GameEngine SelectedGame="SelectedGame" User="GuestUser" />
+        }
+        else
+        {
+            <MudAlert Severity="Severity.Error">Configuration Error.  Please contact tech support.</MudAlert>
+        }
+    }
 }
 
 @code {
@@ -106,6 +147,18 @@ else
     private string? PlayerName { get; set; } = null;
     List<PhysicsGame> Games { get; set; } = [];
     PhysicsGame? SelectedGame { get; set; } = null;
+    private PhysicsGuestUser? GuestUser { get; set; } = null;
+    private void PlayGuest()
+    {
+        GuestUser = new();
+    }
+    private bool Rejoin { get; set; } = false;
+    private void RejoinGuest()
+    {
+        GuestUser = new();
+        Rejoin = true;
+    }
+    private int activePanel { get; set; } = 0;
     protected override void OnParametersSet()
     {
         if (!loaded && User != null)
@@ -113,6 +166,8 @@ else
             Games = physicsService.GetGamesByUser(User.UserID).OrderByDescending(e => e.GameStart).ToList();
             PlayerName = User.UserName;
             loaded = true;
+            if (Games.Any(e => e.GameEnd == null))
+                activePanel = 2;
         }
         if (GameID != null && !urlload)
         {
@@ -122,6 +177,14 @@ else
     }
     private int? NumPlayers = null;
     private bool ShowCompleted { get; set; } = false;
+    private void Cancel()
+    {
+        JoinCode = null;
+        PlayerName = null;
+        GuestPin = null;
+        Rejoin = false;
+        GuestUser = null;
+    }
     private void CreateGame()
     {
         if (NumPlayers == null || User == null)
@@ -153,10 +216,67 @@ else
         }
         else
         {
-            PhysicsPlayer newplayer = new() { GameID = game.ID, PlayerID = User.UserID, PlayerName=PlayerName };
+            PhysicsPlayer newplayer = new() { GameID = game.ID, PlayerID = User.UserID, PlayerName=PlayerName, GuestPlayer=false };
             physicsService.CreatePlayer(newplayer);
             game.Players.Add(newplayer);
             SelectedGame = game;
+        }
+    }
+    private string? GuestPin { get; set; } = null;
+    private void JoinGameAsGuest()
+    {
+        if (string.IsNullOrWhiteSpace(JoinCode) || JoinCode.Length != 6 || string.IsNullOrWhiteSpace(GuestPin) || GuestUser == null)
+            return;
+        PhysicsGame? game = physicsService.GetGameByCode(JoinCode);
+        if (game == null)
+        {
+            Snackbar.Add("Game code not found!", Severity.Error);
+        }
+        else if (game.NumPlayers == game.Players.Count)
+        {
+            Snackbar.Add("That game is full!", Severity.Warning);
+        }
+        else
+        {
+            GuestUser.Passcode = GuestPin;
+            GuestUser.PlayerName = PlayerName ?? "";
+            physicsService.CreateGuestPlayer(GuestUser);
+            PhysicsPlayer newplayer = new() { GameID = game.ID, PlayerID = GuestUser.UserID, PlayerName=PlayerName, GuestPlayer=true };
+            physicsService.CreatePlayer(newplayer);
+            game.Players.Add(newplayer);
+            SelectedGame = game;
+        }
+    }
+    private void RejoinGameAsGuest()
+    {
+        if (string.IsNullOrWhiteSpace(JoinCode) || JoinCode.Length != 6 || string.IsNullOrWhiteSpace(GuestPin))
+            return;
+        PhysicsGame? game = physicsService.GetGameByCode(JoinCode);
+        if (game == null)
+        {
+            Snackbar.Add("Game code not found!", Severity.Error);
+        }
+        else
+        {
+            List<PhysicsPlayer> players = game.Players.Where(e => e.GuestPlayer).ToList();
+            if (players.Count == 0)
+            {
+                Snackbar.Add("That game has no guest players.", Severity.Warning);
+                return;
+            }
+            List<PhysicsGuestUser> users = physicsService.GetGuestUsers(players.Select(e => e.PlayerID).ToHashSet());
+            PhysicsGuestUser? user = users.FirstOrDefault(e => e.Passcode == GuestPin);
+            if (user == null)
+            {
+                Snackbar.Add("No player with that PIN found in that game!", Severity.Error);
+                return;
+            }
+            else
+            {
+                GuestUser = user;
+                SelectedGame = game;
+            }
+            
         }
     }
     private void Refresh()

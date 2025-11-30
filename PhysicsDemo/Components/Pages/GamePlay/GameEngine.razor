@@ -49,7 +49,7 @@
 
 
 @code {
-    [Parameter, EditorRequired] public Auth0User User { get; set; }
+    [Parameter, EditorRequired] public IUser User { get; set; }
     [Parameter, EditorRequired] public PhysicsGame SelectedGame { get; set; }
     private List<UserMoves> Moves { get; set; } = [];
     private PhysicsPlayer? MyPlayer => SelectedGame.Players.FirstOrDefault(e => e.PlayerID == User.UserID);

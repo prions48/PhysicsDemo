@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PhysicsDemo.Data.Users
 {
-    public class Auth0User
+    public class Auth0User : IUser
     {
         [Key] public string UserSAML { get; set; }
         public Guid UserID { get; set; }

@@ -31,9 +31,17 @@
         </MudNavMenu>
     </MudDrawer>
     <MudMainContent>
-        <CascadingValue Value="User">
-            @Body
-        </CascadingValue>
+        @if (!Loaded)
+        {
+            <MudText Typo="Typo.h4">Loading your information</MudText>
+            <MudProgressLinear Indeterminate />
+        }
+        else
+        {
+            <CascadingValue Value="User">
+                @Body
+            </CascadingValue>
+        }
     </MudMainContent>
 </MudLayout>
 
@@ -46,7 +54,7 @@
 @code {
     private MudThemeProvider? Provider { get; set; }
     private bool DarkMode { get; set; }
-    private bool MenuView { get; set; } = true;
+    private bool MenuView { get; set; } = false;
     private Guid UserID { get; set; }
     private string? UserName { get; set; } = null;
     private Auth0User? User { get; set; } = null;
@@ -54,6 +62,7 @@
     {
         MenuView = !MenuView;
     }
+    private bool Loaded { get; set; } = false;
     protected override async Task OnInitializedAsync()
     {
         if (Provider != null)
@@ -75,6 +84,7 @@
                 userService.RecordLogin(User.UserID);
             }
         }
+        Loaded = true;
     }
     private void ToggleTheme()
     {

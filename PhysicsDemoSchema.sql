@@ -14,6 +14,8 @@ CREATE TABLE PhysicsPlayers (
     ID UNIQUEIDENTIFIER NOT NULL,
     GameID UNIQUEIDENTIFIER NOT NULL,
     PlayerID UNIQUEIDENTIFIER NOT NULL,
+    PlayerName NVARCHAR(1000) NULL,
+    GuestPlayer BIT NOT NULL CONSTRAINT DF_PhysicsPlayers_GuestPlayer DEFAULT 0,
     PRIMARY KEY (ID)
 );
 CREATE TABLE PhysicsTurns (
@@ -24,4 +26,11 @@ CREATE TABLE PhysicsTurns (
     TurnValue INT NOT NULL,
     CreatedTimeStamp DATETIME NOT NULL,
     PRIMARY KEY (ID)
+);
+CREATE TABLE PhysicsGuestUsers (
+    UserID UNIQUEIDENTIFIER NOT NULL,
+    PlayerName NVARCHAR(1000) NOT NULL,
+    Passcode NVARCHAR(100) NOT NULL,
+    FirstLogin DATETIME NOT NULL,
+    ClosedOut BIT NOT NULL,
 );

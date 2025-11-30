@@ -133,6 +133,18 @@ namespace PhysicsDemo.Data.GameData
         }
         #endregion
 
+        #region Guest players
+        public void CreateGuestPlayer(PhysicsGuestUser guest)
+        {
+            _context.PhysicsGuestUsers.Add(guest);
+            _context.SaveChanges();
+        }
+        public List<PhysicsGuestUser> GetGuestUsers(HashSet<Guid> ids)
+        {
+            return _context.PhysicsGuestUsers.Where(e => ids.Contains(e.UserID)).ToList();
+        }
+        #endregion
+
         #region Game creators/editors
         public void CreateGame(PhysicsGame game)
         {
