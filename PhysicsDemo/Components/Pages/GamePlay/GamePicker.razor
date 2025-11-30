@@ -2,6 +2,7 @@
 @inject ISnackbar Snackbar
 @using PhysicsDemo.Data.GameData
 @inject PhysicsService physicsService
+<PageTitle>Physics Game Play</PageTitle>
 @if (User != null)
 {
     @if (SelectedGame == null)
@@ -287,6 +288,7 @@ else
             {
                 GuestUser = user;
                 SelectedGame = game;
+                Rejoin = false;
             }
             
         }
