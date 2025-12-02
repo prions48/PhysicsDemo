@@ -15,7 +15,7 @@
     <MudButton OnClick="Refresh" Color="Color.Primary" Variant="Variant.Filled">Refresh</MudButton>
     <MudToggleIconButton Color="Color.Error" ToggledColor="Color.Info" @bind-Toggled="Positive" 
     Icon="@Icons.Material.Filled.ArrowCircleLeft" ToggledIcon="@Icons.Material.Filled.ArrowCircleRight"></MudToggleIconButton>
-    <MudText>Direction: @(Positive ? "Right" : "Left")</MudText>
+    <MudText>Direction: @(Positive ? "Right" : "Left") (coming soon)</MudText>
 </MudStack>
 <MudTabs>
     <MudTabPanel Text="My Moves">
@@ -33,7 +33,7 @@
                 <tr>
                     <td>@(TurnNumber)</td>
                     <td>
-                        <MudNumericField @bind-Value="NewForce" Label="Force" Style="width:200px;" Min="0" Immediate />
+                        <MudNumericField @bind-Value="NewForce" Label="Force" Style="width:200px;" Immediate />
                     </td>
                     <td colspan="3">
                         <MudButton Color="Color.Info" Variant="Variant.Filled" Disabled="!NewForce.HasValue || TurnNumber == MyMoves!.MaxTurn" OnClick="AddMove">Next Step</MudButton>
@@ -70,7 +70,7 @@
     private UserMoves? MyMoves => Moves.FirstOrDefault(e => e.UserID == User.UserID);
     private int TurnNumber { get; set; } = 1;
     private bool Positive { get; set; } = true;
-    private int DirectionFactor => Positive ? 1 : -1;
+    //private int DirectionFactor => Positive ? 1 : -1;
     private int? NewForce { get; set; } = null;
     protected override void OnInitialized()
     {
@@ -177,7 +177,7 @@
             GameID = SelectedGame.ID,
             PlayerID = User.UserID,
             CreatedTimeStamp = DateTime.Now,
-            TurnValue = NewForce.Value * DirectionFactor,
+            TurnValue = NewForce.Value,
             RoundNumber = TurnNumber
         };
         physicsService.CreateTurn(turn);
