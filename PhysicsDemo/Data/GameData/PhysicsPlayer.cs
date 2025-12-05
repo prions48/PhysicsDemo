@@ -11,6 +11,7 @@ namespace PhysicsDemo.Data.GameData
         public string? PlayerName { get; set; }
         public bool GuestPlayer { get; set; }
         [NotMapped] public List<PhysicsTurn> Turns { get; set; } = [];
+        [NotMapped] public List<PhysicsDirection> Directions { get; set; } = [];
         public PhysicsTurn? CurrentTurn => Turns.MaxBy(e => e.RoundNumber);
         public bool? PassedMidpoint { get; set; }
         public bool? PassedEndpoint { get; set; }

@@ -60,6 +60,10 @@
               "target": "Package",
               "version": "[12.24.0, )"
             },
+            "Blazor-ApexCharts": {
+              "target": "Package",
+              "version": "[6.0.2, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.0, )"

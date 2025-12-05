@@ -37,9 +37,11 @@ namespace PhysicsDemo.Data.GameData
             Guid gameid = game.ID;
             game.Players = _context.PhysicsPlayers.Where(e => e.GameID == gameid).ToList();
             List<PhysicsTurn> turns = _context.PhysicsTurns.Where(e => gameid == e.GameID).ToList();
+            List<PhysicsDirection> directions = _context.PhysicsDirections.Where(e => gameid == e.GameID).ToList();
             foreach (PhysicsPlayer player in game.Players)
             {
                 player.Turns = turns.Where(e => e.PlayerID == player.PlayerID).OrderBy(e => e.RoundNumber).ToList();
+                player.Directions = directions.Where(e => e.PlayerID == player.PlayerID).OrderBy(e => e.TurnValue).ToList();
             }
             return RecalcGame(game);
         }
@@ -49,11 +51,13 @@ namespace PhysicsDemo.Data.GameData
             foreach (PhysicsGame game in games)
             {
                 Guid gameid = game.ID;
-                List<PhysicsTurn> turns = _context.PhysicsTurns.Where(e => e.GameID == gameid).ToList();
                 game.Players = players.Where(e => e.GameID == gameid).ToList();
+                List<PhysicsTurn> turns = _context.PhysicsTurns.Where(e => e.GameID == gameid).ToList();
+                List<PhysicsDirection> directions = _context.PhysicsDirections.Where(e => gameid == e.GameID).ToList();
                 foreach (PhysicsPlayer player in game.Players)
                 {
                     player.Turns = turns.Where(e => e.PlayerID == player.ID).OrderBy(e => e.RoundNumber).ToList();
+                    player.Directions = directions.Where(e => e.PlayerID == player.PlayerID).OrderBy(e => e.TurnValue).ToList();
                 }
             }
             return RecalcTurn(games);
@@ -176,6 +180,11 @@ namespace PhysicsDemo.Data.GameData
         public void CreateTurn(PhysicsTurn turn)
         {
             _context.PhysicsTurns.Add(turn);
+            _context.SaveChanges();
+        }
+        public void CreateDirection(PhysicsDirection direction)
+        {
+            _context.PhysicsDirections.Add(direction);
             _context.SaveChanges();
         }
         #endregion

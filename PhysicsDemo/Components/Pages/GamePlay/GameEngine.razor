@@ -1,4 +1,6 @@
 @using PhysicsDemo.Data.GameData
+@using ApexCharts
+@using Color = MudBlazor.Color
 @inject ISnackbar Snackbar
 @inject PhysicsService physicsService
 
@@ -13,22 +15,12 @@
         <MudChip Color="SelectedGame.Players.Any(e => e.PassedEndpoint == true) ? Color.Success : Color.Default" T="string">Endpoint: @SelectedGame.EndPoint.ToString()</MudChip>
     }
     <MudButton OnClick="Refresh" Color="Color.Primary" Variant="Variant.Filled">Refresh</MudButton>
-    <MudToggleIconButton Color="Color.Error" ToggledColor="Color.Info" @bind-Toggled="Positive" 
-    Icon="@Icons.Material.Filled.ArrowCircleLeft" ToggledIcon="@Icons.Material.Filled.ArrowCircleRight"></MudToggleIconButton>
-    <MudText>Direction: @(Positive ? "Right" : "Left") (coming soon)</MudText>
+    <MudIconButton Color="Positive ? Color.Info : Color.Error" Icon="@(Positive ? Icons.Material.Filled.ArrowCircleRight : Icons.Material.Filled.ArrowCircleLeft)" OnClick="AddDirection" />
+    <MudText>Direction: @(Positive ? "Right" : "Left")</MudText>
 </MudStack>
 <MudTabs>
     <MudTabPanel Text="My Moves">
         <MudSimpleTable Striped Bordered>
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>Force</th>
-                    <th>Acceleration</th>
-                    <th>Velocity</th>
-                    <th>Position</th>
-                </tr>
-            </thead>
             <tbody>
                 <tr>
                     <td>@(TurnNumber)</td>
@@ -38,6 +30,13 @@
                     <td colspan="3">
                         <MudButton Color="Color.Info" Variant="Variant.Filled" Disabled="!NewForce.HasValue || TurnNumber == MyMoves!.MaxTurn" OnClick="AddMove">Next Step</MudButton>
                     </td>
+                </tr>
+                <tr>
+                    <td><b>Time</b></td>
+                    <td><b>Force</b></td>
+                    <td><b>Acceleration</b></td>
+                    <td><b>Velocity</b></td>
+                    <td><b>Position</b></td>
                 </tr>
                 @foreach (GameStepModel model in MyMoves!.Steps.OrderByDescending(e => e.Time))
                 {
@@ -53,10 +52,30 @@
         </MudSimpleTable>
     </MudTabPanel>
     <MudTabPanel Text="Graphs">
-        <MudStack>
+        @*<MudStack>
             <MudChart ChartType="ChartType.Line" ChartSeries="AccData" ChartOptions="_accoptions"></MudChart>
             <MudChart ChartType="ChartType.Line" ChartSeries="VecData" ChartOptions="_vecoptions"></MudChart>
             <MudChart ChartType="ChartType.Line" ChartSeries="PosData" ChartOptions="_posoptions"></MudChart>
+        </MudStack>*@
+        <MudStack>
+            <ApexChart TItem="GameStepModel" Title="Acceleration" Options="AccOptions">
+                @foreach (var move in Moves)
+                {
+                    <ApexPointSeries TItem="GameStepModel" Items="move.Steps" Name="@(move.UserName)" SeriesType="SeriesType.Line" XValue="@(e => e.Time)" YValue="@(e => (decimal)e.Acceleration)" ShowDataLabels />
+                }
+            </ApexChart>
+            <ApexChart TItem="GameStepModel" Title="Velocity" Options="VecOptions">
+                @foreach (var move in Moves)
+                {
+                    <ApexPointSeries TItem="GameStepModel" Items="move.Steps" Name="@(move.UserName)" SeriesType="SeriesType.Line" XValue="@(e => e.Time)" YValue="@(e => (decimal)e.Velocity)" ShowDataLabels />
+                }
+            </ApexChart>
+            <ApexChart TItem="GameStepModel" Title="Position" Options="PosOptions">
+                @foreach (var move in Moves)
+                {
+                    <ApexPointSeries TItem="GameStepModel" Items="move.Steps" Name="@(move.UserName)" SeriesType="SeriesType.Line" XValue="@(e => e.Time)" YValue="@(e => (decimal)e.Position)" ShowDataLabels />
+                }
+            </ApexChart>
         </MudStack>
     </MudTabPanel>
 </MudTabs>
@@ -72,14 +91,13 @@
     private bool Positive { get; set; } = true;
     //private int DirectionFactor => Positive ? 1 : -1;
     private int? NewForce { get; set; } = null;
+    private ApexChartOptions<GameStepModel> AccOptions { get; set; } = new ApexChartOptions<GameStepModel> { Stroke = new Stroke { Curve = Curve.Stepline }, Chart = new Chart { Type = ApexCharts.ChartType.Line } };
+    private ApexChartOptions<GameStepModel> VecOptions { get; set; } = new ApexChartOptions<GameStepModel> { Stroke = new Stroke { Curve = Curve.Smooth }, Chart = new Chart { Type = ApexCharts.ChartType.Line } };
+    private ApexChartOptions<GameStepModel> PosOptions { get; set; } = new ApexChartOptions<GameStepModel> { Stroke = new Stroke { Curve = Curve.Smooth }, Chart = new Chart { Type = ApexCharts.ChartType.Line } };
     protected override void OnInitialized()
     {
         base.OnInitialized();
         Refresh();
-        if (MyMoves != null)
-        {
-            Positive = MyMoves.Steps.LastOrDefault()?.Acceleration >= 0;
-        }
     }
     private void Refresh()
     {
@@ -88,9 +106,6 @@
         {
             TurnNumber = SelectedGame.CurrentRound;
             Moves = [];
-            AccData.Clear();
-            VecData.Clear();
-            PosData.Clear();
             foreach (PhysicsPlayer player in SelectedGame.Players)
             {
                 UserMoves moves = new UserMoves() { UserID = player.PlayerID, UserName = player.PlayerName ?? "Unknown", Steps = RecalculateSteps(player) };
@@ -128,6 +143,8 @@
                 }
                 Moves.Add(moves);
             }
+            Positive = MyPlayer?.Directions.Count % 2 == 0;
+            SetDirectionGraph();
             if (game.GameEnd != null)
             {
                 List<PhysicsPlayer> players = game.Players.Where(e => e.PassedEndpoint == true).ToList();
@@ -154,18 +171,6 @@
         {
             models.Add(new(models.Last(),turn));
         }
-        ChartSeries newseries1 = new();
-        ChartSeries newseries2 = new();
-        ChartSeries newseries3 = new();
-        newseries1.Name = player.PlayerName + " Acceleration";
-        newseries1.Data = models.Select(e => e.Acceleration).ToArray();
-        newseries2.Name = player.PlayerName + " Velocity";
-        newseries2.Data = models.Select(e => e.Velocity).ToArray();
-        newseries3.Name = player.PlayerName + " Position";
-        newseries3.Data = models.Select(e => e.Position).ToArray();
-        AccData.Add(newseries1);
-        VecData.Add(newseries2);
-        PosData.Add(newseries3);
         return models;
     }
     private void AddMove()
@@ -185,6 +190,37 @@
         //MyMoves.Steps.Add(new(MyMoves.Steps.Last(),turn));
         Refresh();
     }
+    private void AddDirection()
+    {
+        PhysicsDirection direction = new()
+        {
+            GameID = SelectedGame.ID,
+            PlayerID = User.UserID,
+            TurnValue = TurnNumber
+        };
+        physicsService.CreateDirection(direction);
+        if (MyPlayer != null)
+        {
+            MyPlayer.Directions.Add(direction);
+        }
+        Positive = !Positive;
+        SetDirectionGraph();
+    }
+    private void SetDirectionGraph()
+    {
+        List<AnnotationsXAxis> annotations = [];
+        foreach (PhysicsPlayer player in SelectedGame.Players)
+        {
+            foreach (PhysicsDirection direction in player.Directions)
+            {
+                annotations.Add(new() {
+                    Label = new() { Text = $"Turnaround for {player.PlayerName}", Style = new() { Background = "red"} },
+                    X = direction.TurnValue
+                });
+            }
+        }
+        AccOptions.Annotations = new() { Xaxis = annotations };
+    }
     public class UserMoves
     {
         public Guid UserID { get; set; }
@@ -192,13 +228,4 @@
         public List<GameStepModel> Steps { get; set; } = [];
         public int MaxTurn => Steps.Count == 0 ? 0 : Steps.Select(e => e.Time).Max();
     }
-    #region Graphs
-    private ChartOptions _accoptions = new() { YAxisTicks=1, XAxisLines=true, YAxisLines=true};
-    private ChartOptions _vecoptions = new() { YAxisTicks=3, XAxisLines=true, YAxisLines=true};
-    private ChartOptions _posoptions = new() { YAxisTicks=10, XAxisLines=true, YAxisLines=true};
-    private List<ChartSeries> AccData { get; set; } = new();
-    private List<ChartSeries> VecData { get; set; } = new();
-    private List<ChartSeries> PosData { get; set; } = new();
-    #endregion
-    
 }
