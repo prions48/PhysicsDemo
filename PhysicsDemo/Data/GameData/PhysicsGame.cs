@@ -21,6 +21,7 @@ namespace PhysicsDemo.Data.GameData
         [NotMapped] public List<PhysicsPlayer> Players { get; set; } = [];
         [NotMapped] public List<PhysicsTurn> Turns => Players.SelectMany(e => e.Turns).ToList();
         [NotMapped] public List<PhysicsTurn> CurrentTurns => Players.Where(e => e.CurrentTurn != null).Select(e => e.CurrentTurn!).ToList();
+        [NotMapped] public PhysicsPlayer? Winner => Players.FirstOrDefault(e => e.PlayerID == WinningPlayerID);
 
     }
 }

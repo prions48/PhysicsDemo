@@ -6,6 +6,7 @@
 @inject ISnackbar Snackbar
 @inject PhysicsService physicsService
 @inject WebHookService webhookService
+@inject NavigationManager navManager
 
 <MudStack Row AlignItems="AlignItems.Center">
     <MudText Style="font-weight: bold;">@SelectedGame.JoinCode</MudText>
@@ -21,6 +22,8 @@
     @*<MudButton OnClick="TriggerRefresh" Color="Color.Secondary" Variant="Variant.Filled">Test</MudButton>*@
     <MudIconButton Color="Positive ? Color.Info : Color.Error" Icon="@(Positive ? Icons.Material.Filled.ArrowCircleRight : Icons.Material.Filled.ArrowCircleLeft)" OnClick="AddDirection" />
     <MudText>Direction: @(Positive ? "Right" : "Left")</MudText>
+    <MudText Typo="Typo.h4">@Winner</MudText>
+    <MudButton Color="Color.Default" StartIcon="@Icons.Material.Filled.Home" Variant="Variant.Filled" OnClick="Reset">Home</MudButton>
 </MudStack>
 <MudTabs>
     <MudTabPanel Text="My Moves">
@@ -95,9 +98,9 @@
     private bool Positive { get; set; } = true;
     //private int DirectionFactor => Positive ? 1 : -1;
     private int? NewForce { get; set; } = null;
-    private ApexChartOptions<GameStepModel> AccOptions { get; set; } = new ApexChartOptions<GameStepModel> { Stroke = new Stroke { Curve = Curve.Stepline }, Chart = new Chart { Type = ApexCharts.ChartType.Line } };
-    private ApexChartOptions<GameStepModel> VecOptions { get; set; } = new ApexChartOptions<GameStepModel> { Stroke = new Stroke { Curve = Curve.Smooth }, Chart = new Chart { Type = ApexCharts.ChartType.Line } };
-    private ApexChartOptions<GameStepModel> PosOptions { get; set; } = new ApexChartOptions<GameStepModel> { Stroke = new Stroke { Curve = Curve.Smooth }, Chart = new Chart { Type = ApexCharts.ChartType.Line } };
+    private ApexChartOptions<GameStepModel> AccOptions { get; set; } = new ApexChartOptions<GameStepModel> { Stroke = new Stroke { Curve = Curve.Stepline }, Chart = new Chart { Type = ApexCharts.ChartType.Line, Zoom=new() { AllowMouseWheelZoom=false, Enabled=false} } };
+    private ApexChartOptions<GameStepModel> VecOptions { get; set; } = new ApexChartOptions<GameStepModel> { Stroke = new Stroke { Curve = Curve.Smooth }, Chart = new Chart { Type = ApexCharts.ChartType.Line, Zoom=new() { AllowMouseWheelZoom=false, Enabled=false} } };
+    private ApexChartOptions<GameStepModel> PosOptions { get; set; } = new ApexChartOptions<GameStepModel> { Stroke = new Stroke { Curve = Curve.Smooth }, Chart = new Chart { Type = ApexCharts.ChartType.Line, Zoom=new() { AllowMouseWheelZoom=false, Enabled=false} } };
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -120,6 +123,11 @@
                 Refresh();
             }
         }
+    }
+    private string? Winner = null;
+    private void Reset()
+    {
+        navManager.NavigateTo("/",true);
     }
     private async Task TriggerRefresh()
     {
@@ -190,6 +198,13 @@
                     physicsService.UpdateGame(game);
                     Snackbar.Add(players.First().PlayerName + " has won the game!", Severity.Success);
                 }
+            }
+            if (game.WinningPlayerID != null)
+            {
+                PhysicsPlayer? player = game.Players.FirstOrDefault(e => e.PlayerID == game.WinningPlayerID);
+                if (player != null)
+                    Winner = "Winner: " + player.PlayerName;
+
             }
             SelectedGame = game;
             NewForce = null;

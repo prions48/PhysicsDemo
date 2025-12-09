@@ -18,6 +18,11 @@ namespace PhysicsDemo.Data.Users
             _context.SaveChanges();
             return newuser;
         }
+        public void UpdateUser(Auth0User user)
+        {
+            _context.Auth0Users.Update(user);
+            _context.SaveChanges();
+        }
         public void CreateFileRecord(Auth0UserFile file)
         {
             _context.Auth0UserFiles.Add(file);

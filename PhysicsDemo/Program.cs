@@ -77,7 +77,16 @@ app.MapPost("/webhook", async (HttpRequest request, WebHookService webhookServic
     var body = await reader.ReadToEndAsync();
 
     // Validate signature if required
-    var signatureHeader = request.Headers["X-Webhook-Signature"].FirstOrDefault();
+    string? signatureHeader = null;
+    try
+    {
+        signatureHeader = request.Headers["X-Webhook-Signature"].FirstOrDefault();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Webook received with no webhook signature: {ex.Message}");
+        return Results.BadRequest();
+    }
     if (signatureHeader == null)
     {
         Console.WriteLine($"Webhook received but no signature found: {body}");

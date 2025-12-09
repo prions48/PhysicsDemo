@@ -91,6 +91,12 @@ namespace PhysicsDemo.Data.GameData
             {
                 game.CurrentRound = maxrd;
             }
+            if (game.GameEnd == null && game.GameStart.AddDays(7) < DateTime.Now)//auto close old games
+            {
+                game.GameEnd = DateTime.Now;
+                _context.PhysicsGames.Update(game);
+                _context.SaveChanges();
+            }
             return game;
         }
         #endregion

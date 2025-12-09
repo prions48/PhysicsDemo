@@ -2,6 +2,7 @@
 @inject ISnackbar Snackbar
 @using PhysicsDemo.Data.GameData
 @inject PhysicsService physicsService
+@inject UserService userService
 <PageTitle>Physics Game Play</PageTitle>
 @if (User != null)
 {
@@ -11,7 +12,13 @@
             <MudTabPanel Text="Create New Game">
                 <MudStack>
                     <MudTextField @bind-Value="PlayerName" Label="Your Name" />
-                    <MudNumericField HideSpinButtons @bind-Value="NumPlayers" Label="# Players" Min="2" Max="6" />
+                    <MudSelect @bind-Value="NumPlayers" Label="# Players">
+                        <MudSelectItem T="int?" Value="2">2</MudSelectItem>
+                        <MudSelectItem T="int?" Value="3">3</MudSelectItem>
+                        <MudSelectItem T="int?" Value="4">4</MudSelectItem>
+                        <MudSelectItem T="int?" Value="5">5</MudSelectItem>
+                        <MudSelectItem T="int?" Value="6">6</MudSelectItem>
+                    </MudSelect>
                     <MudStack Row>
                         <MudNumericField HideSpinButtons @bind-Value="StartPt" Label="Start" />
                         <MudNumericField HideSpinButtons @bind-Value="MidPt" Label="Midpoint" />
@@ -62,22 +69,43 @@
                         <MudTh>Status</MudTh>
                         <MudTh>Started</MudTh>
                         <MudTh>Ended</MudTh>
+                        <MudTh>Winner</MudTh>
                         <MudTh># Players</MudTh>
-                        <MudTh>Rejoin</MudTh>
+                        <MudTh>Actions</MudTh>
                     </HeaderContent>
                     <RowTemplate>
                         <MudTd>@(context.GameEnd == null ? "In Progress" : "Ended")</MudTd>
                         <MudTd>@context.GameStart.ToString("MM/dd/yy")</MudTd>
                         <MudTd>@context.GameEnd?.ToString("MM/dd/yy")</MudTd>
+                        <MudTd>
+                            @if (context.GameEnd != null)
+                            {
+                                <p>@(context.Winner?.PlayerName ?? "No One")</p>
+                            }
+                        </MudTd>
+
                         <MudTd>@context.NumPlayers</MudTd>
                         <MudTd>
                             @if (context.GameEnd == null)
                             {
                                 <MudIconButton Icon="@Icons.Material.TwoTone.PlayCircle" OnClick="() => SelectedGame = context" Color="Color.Info" />
+                                <MudIconButton Icon="@Icons.Material.TwoTone.Cancel" OnClick="() => CloseGame(context)" Color="Color.Warning" />
+                            }
+                            else if (ShowCompleted)
+                            {
+                                <MudIconButton Icon="@Icons.Material.TwoTone.DataThresholding" OnClick="() => SelectedGame = context" Color="Color.Info" />
                             }
                         </MudTd>
                     </RowTemplate>
                 </MudTable>
+            </MudTabPanel>
+            <MudTabPanel Text="Profile">
+                <MudStack>
+                    <MudTextField @bind-Value="User.UserName" Label="Your Name" />
+                    <MudTextField @bind-Value="User.EmailAddress" Label="Your Email Address" />
+                    <MudButton Disabled="string.IsNullOrWhiteSpace(User.UserName) || string.IsNullOrWhiteSpace(User.EmailAddress)" 
+                    OnClick="SaveProfile" Variant="Variant.Filled" Color="Color.Info">Save Profile</MudButton>
+                </MudStack>
             </MudTabPanel>
         </MudTabs>
     }
@@ -169,6 +197,7 @@ else
     {
         if (!loaded && User != null)
         {
+            PlayerName = User.UserName ?? User.EmailAddress ?? "Your Name";
             Games = physicsService.GetGamesByUser(User.UserID).OrderByDescending(e => e.GameStart).ToList();
             PlayerName = User.UserName;
             loaded = true;
@@ -300,6 +329,16 @@ else
             }
             
         }
+    }
+    private void SaveProfile()
+    {
+        if (User != null)
+            userService.UpdateUser(User);
+    }
+    private void CloseGame(PhysicsGame game)
+    {
+        game.GameEnd = DateTime.Now;
+        physicsService.UpdateGame(game);
     }
     private void Refresh()
     {
