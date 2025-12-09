@@ -81,6 +81,10 @@
             "MudBlazor": {
               "target": "Package",
               "version": "[8.14.0, )"
+            },
+            "System.Text.Json": {
+              "target": "Package",
+              "version": "[10.0.0, )"
             }
           },
           "imports": [

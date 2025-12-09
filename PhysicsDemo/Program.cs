@@ -8,6 +8,7 @@ using PhysicsDemo.Data.Files;
 using PhysicsDemo.Data.Users;
 using Microsoft.EntityFrameworkCore;
 using PhysicsDemo.Data.GameData;
+using PhysicsDemo.Data.WebHooks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents().AddCircuitOptions(e => e.DetailedErrors = true);
 
 builder.Services.AddMudServices();
-
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<IEmailSettings,EmailSettings>();
 builder.Services.AddScoped<EmailService>();
 
@@ -33,6 +34,8 @@ builder.Services.AddScoped<UserService>();
 
 builder.Services.AddDbContext<PhysicsContext>(o => o.UseSqlServer(builder.Configuration["ConnectionStrings:SQL"]));
 builder.Services.AddScoped<PhysicsService>();
+
+builder.Services.AddSingleton<WebHookService>();
 
 var app = builder.Build();
 
@@ -66,6 +69,30 @@ app.MapGet("/Account/Logout", async (HttpContext httpContext) =>
 
   await httpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
   await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+});
+
+app.MapPost("/webhook", async (HttpRequest request, WebHookService webhookService) =>
+{
+    using var reader = new StreamReader(request.Body);
+    var body = await reader.ReadToEndAsync();
+
+    // Validate signature if required
+    var signatureHeader = request.Headers["X-Webhook-Signature"].FirstOrDefault();
+    if (signatureHeader == null)
+    {
+        Console.WriteLine($"Webhook received but no signature found: {body}");
+        return Results.Problem();
+    }
+    if (!webhookService.ValidateSignature(body, signatureHeader))
+    {
+        Console.WriteLine($"Webhook received but failed validation: {body}");
+        return Results.Unauthorized();
+    }
+    // Process the webhook data
+    webhookService.RaiseEvent(body);
+    Console.WriteLine($"Webhook received: {body}");
+
+    return Results.Ok();
 });
 
 

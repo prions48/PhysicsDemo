@@ -278,3 +278,8 @@
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Release/net9.0/compressed/dko6y7plta-j4a4u2uj29.gz
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Release/net9.0/compressed/1j8oabzfj7-qz6clc5837.gz
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/obj/Release/net9.0/compressed/0g0tdqq8mx-ody88ncx6z.gz
+/Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/System.IO.Pipelines.dll
+/Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/System.Text.Encodings.Web.dll
+/Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/System.Text.Json.dll
+/Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/runtimes/browser/lib/net8.0/System.Text.Encodings.Web.dll
+/Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/runtimes/win/lib/net9.0/System.Text.Encodings.Web.dll

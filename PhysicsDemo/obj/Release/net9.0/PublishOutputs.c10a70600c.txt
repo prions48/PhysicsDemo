@@ -55,10 +55,13 @@
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/System.Drawing.Common.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/System.IdentityModel.Tokens.Jwt.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/System.IO.Hashing.dll
+/Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/System.IO.Pipelines.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/System.Memory.Data.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/System.Runtime.Caching.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/System.Security.Cryptography.ProtectedData.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/System.Security.Permissions.dll
+/Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/System.Text.Encodings.Web.dll
+/Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/System.Text.Json.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/System.Windows.Extensions.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/runtimes/unix/lib/net6.0/Microsoft.Data.SqlClient.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/runtimes/win/lib/net6.0/Microsoft.Data.SqlClient.dll
@@ -71,5 +74,7 @@
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/runtimes/win/lib/net6.0/System.Drawing.Common.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/runtimes/win/lib/net6.0/System.Runtime.Caching.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/runtimes/win/lib/net6.0/System.Security.Cryptography.ProtectedData.dll
+/Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/runtimes/browser/lib/net8.0/System.Text.Encodings.Web.dll
+/Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/runtimes/win/lib/net9.0/System.Text.Encodings.Web.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/runtimes/win/lib/net6.0/System.Windows.Extensions.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/PhysicsDemo.deps.json
