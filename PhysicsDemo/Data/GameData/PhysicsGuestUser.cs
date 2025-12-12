@@ -7,7 +7,7 @@ namespace PhysicsDemo.Data.GameData
     {
         [Key] public Guid UserID { get; set; } = Guid.NewGuid();
         public string PlayerName { get; set; }
-        public string Passcode { get; set; }
+        public string Passcode { get; set; } = "";
         public DateTime FirstLogin { get; set; }
         public bool ClosedOut { get; set; }
         public PhysicsGuestUser()

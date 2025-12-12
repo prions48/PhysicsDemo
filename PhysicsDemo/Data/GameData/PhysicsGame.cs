@@ -7,7 +7,7 @@ namespace PhysicsDemo.Data.GameData
     {
         [Key] public Guid ID { get; set; } = Guid.NewGuid();
         public Guid CreatorID { get; set; }
-        public string JoinCode { get; set; }
+        public string JoinCode { get; set; } = "";
         public DateTime GameStart { get; set; }
         public int NumPlayers { get; set; }
         public int CurrentRound { get; set; }

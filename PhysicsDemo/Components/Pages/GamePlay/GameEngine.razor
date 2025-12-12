@@ -118,7 +118,7 @@ else
         await TriggerRefresh();
     }
     //private string Payload { get; set; } ="";
-    private void OnWebHookReceived(string body)
+    private async void OnWebHookReceived(string body)
     {
         //Payload = body;
         WebhookEvent? payload = JsonSerializer.Deserialize<WebhookEvent>(body);
@@ -130,7 +130,7 @@ else
                 {
                     Snackbar.Add($"Move by {payload.PlayerName}!", Severity.Info);
                 }
-                Refresh();
+                await Refresh();
             }
         }
     }
@@ -271,13 +271,16 @@ else
     private void SetDirectionGraph()
     {
         List<AnnotationsXAxis> annotations = [];
+        Dictionary<double,int> valcount = [];
         foreach (PhysicsPlayer player in SelectedGame.Players)
         {
             foreach (PhysicsDirection direction in player.Directions)
             {
+                valcount.TryAdd(direction.TurnValue,0);
+                valcount[direction.TurnValue]++;
                 annotations.Add(new() {
                     Label = new() { Text = $"Turnaround for {player.PlayerName}", Style = new() { Background = "red"} },
-                    X = direction.TurnValue
+                    X = (double)direction.TurnValue + ((valcount[direction.TurnValue]-1) * 0.1)
                 });
             }
         }
@@ -286,7 +289,7 @@ else
     public class UserMoves
     {
         public Guid UserID { get; set; }
-        public string UserName { get; set; }
+        public string UserName { get; set; } = "";
         public List<GameStepModel> Steps { get; set; } = [];
         public int MaxTurn => Steps.Count == 0 ? 0 : Steps.Select(e => e.Time).Max();
     }
