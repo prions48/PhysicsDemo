@@ -111,19 +111,7 @@
     }
     else
     {
-        @if (SelectedGame.NumPlayers == SelectedGame.Players.Count)
-        {
-            <GameEngine SelectedGame="SelectedGame" User="User" />
-        }
-        else
-        {
-            <MudStack>
-                <MudAlert Severity="Severity.Warning">Waiting for players to join</MudAlert>
-                <MudProgressLinear Indeterminate />
-                <MudText Typo="Typo.h3">Join Code: @SelectedGame.JoinCode</MudText>
-                <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="Refresh">Refresh</MudButton>
-            </MudStack>
-        }
+        <GameEngine SelectedGame="SelectedGame" User="User" />
     }
 }
 else
@@ -207,6 +195,7 @@ else
         if (GameID != null && !urlload)
         {
             SelectedGame = Games.FirstOrDefault(e => e.ID == GameID);
+            //add QR code logic here
             urlload = true;
         }
     }

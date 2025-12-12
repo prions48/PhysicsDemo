@@ -8,86 +8,96 @@
 @inject WebHookService webhookService
 @inject NavigationManager navManager
 
-<MudStack Row AlignItems="AlignItems.Center">
-    <MudText Style="font-weight: bold;">@SelectedGame.JoinCode</MudText>
-    @if (SelectedGame.MidPoint.HasValue)
-    {
-        <MudChip Color="SelectedGame.Players.Any(e => e.PassedMidpoint == true) ? Color.Info : Color.Default" T="string">Midpoint: @SelectedGame.MidPoint.ToString()</MudChip>
-    }
-    @if (SelectedGame.EndPoint.HasValue)
-    {
-        <MudChip Color="SelectedGame.Players.Any(e => e.PassedEndpoint == true) ? Color.Success : Color.Default" T="string">Endpoint: @SelectedGame.EndPoint.ToString()</MudChip>
-    }
-    <MudButton OnClick="Refresh" Color="Color.Primary" Variant="Variant.Filled">Refresh</MudButton>
-    @*<MudButton OnClick="TriggerRefresh" Color="Color.Secondary" Variant="Variant.Filled">Test</MudButton>*@
-    <MudIconButton Color="Positive ? Color.Info : Color.Error" Icon="@(Positive ? Icons.Material.Filled.ArrowCircleRight : Icons.Material.Filled.ArrowCircleLeft)" OnClick="AddDirection" />
-    <MudText>Direction: @(Positive ? "Right" : "Left")</MudText>
-    <MudText Typo="Typo.h4">@Winner</MudText>
-    <MudButton Color="Color.Default" StartIcon="@Icons.Material.Filled.Home" Variant="Variant.Filled" OnClick="Reset">Home</MudButton>
-</MudStack>
-<MudTabs>
-    <MudTabPanel Text="My Moves">
-        <MudSimpleTable Striped Bordered>
-            <tbody>
-                <tr>
-                    <td>@(TurnNumber)</td>
-                    <td>
-                        <MudNumericField @bind-Value="NewForce" Label="Force" Style="width:200px;" Immediate />
-                    </td>
-                    <td colspan="3">
-                        <MudButton Color="Color.Info" Variant="Variant.Filled" Disabled="!NewForce.HasValue || TurnNumber == MyMoves!.MaxTurn" OnClick="AddMove">Next Step</MudButton>
-                    </td>
-                </tr>
-                <tr>
-                    <td><b>Time</b></td>
-                    <td><b>Force</b></td>
-                    <td><b>Acceleration</b></td>
-                    <td><b>Velocity</b></td>
-                    <td><b>Position</b></td>
-                </tr>
-                @foreach (GameStepModel model in MyMoves!.Steps.OrderByDescending(e => e.Time))
-                {
+@if (SelectedGame.NumPlayers > SelectedGame.Players.Count)
+{
+    <MudStack>
+        <MudAlert Severity="Severity.Warning">Waiting for players to join</MudAlert>
+        <MudProgressLinear Indeterminate />
+        <MudText Typo="Typo.h3">Join Code: @SelectedGame.JoinCode</MudText>
+        <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="Refresh">Refresh</MudButton>
+    </MudStack>
+}
+else
+{
+    <MudStack Row AlignItems="AlignItems.Center">
+        <MudText Style="font-weight: bold;">@SelectedGame.JoinCode</MudText>
+        @if (SelectedGame.MidPoint.HasValue)
+        {
+            <MudChip Color="SelectedGame.Players.Any(e => e.PassedMidpoint == true) ? Color.Info : Color.Default" T="string">Midpoint: @SelectedGame.MidPoint.ToString()</MudChip>
+        }
+        @if (SelectedGame.EndPoint.HasValue)
+        {
+            <MudChip Color="SelectedGame.Players.Any(e => e.PassedEndpoint == true) ? Color.Success : Color.Default" T="string">Endpoint: @SelectedGame.EndPoint.ToString()</MudChip>
+        }
+        <MudButton OnClick="Refresh" Color="Color.Primary" Variant="Variant.Filled">Refresh</MudButton>
+        @*<MudButton OnClick="TriggerRefresh" Color="Color.Secondary" Variant="Variant.Filled">Test</MudButton>*@
+        <MudIconButton Color="Positive ? Color.Info : Color.Error" Icon="@(Positive ? Icons.Material.Filled.ArrowCircleRight : Icons.Material.Filled.ArrowCircleLeft)" OnClick="AddDirection" />
+        <MudText>Direction: @(Positive ? "Right" : "Left")</MudText>
+        <MudText Typo="Typo.h4">@Winner</MudText>
+        <MudButton Color="Color.Default" StartIcon="@Icons.Material.Filled.Home" Variant="Variant.Filled" OnClick="Reset">Home</MudButton>
+    </MudStack>
+    <MudTabs>
+        <MudTabPanel Text="My Moves">
+            <MudSimpleTable Striped Bordered>
+                <tbody>
                     <tr>
-                        <td>@model.Time</td>
-                        <td>@model.Force.ToString()</td>
-                        <td>@model.Acceleration.ToString("N1")</td>
-                        <td>@model.Velocity.ToString("N1")</td>
-                        <td>@model.Position.ToString("N1")</td>
+                        <td>@(TurnNumber)</td>
+                        <td>
+                            <MudNumericField @bind-Value="NewForce" Label="Force" Style="width:200px;" Immediate />
+                        </td>
+                        <td colspan="3">
+                            <MudButton Color="Color.Info" Variant="Variant.Filled" Disabled="!NewForce.HasValue || TurnNumber == MyMoves!.MaxTurn" OnClick="AddMove">Next Step</MudButton>
+                        </td>
                     </tr>
-                }
-            </tbody>
-        </MudSimpleTable>
-    </MudTabPanel>
-    <MudTabPanel Text="Graphs">
-        @*<MudStack>
-            <MudChart ChartType="ChartType.Line" ChartSeries="AccData" ChartOptions="_accoptions"></MudChart>
-            <MudChart ChartType="ChartType.Line" ChartSeries="VecData" ChartOptions="_vecoptions"></MudChart>
-            <MudChart ChartType="ChartType.Line" ChartSeries="PosData" ChartOptions="_posoptions"></MudChart>
-        </MudStack>*@
-        <MudStack>
-            <ApexChart TItem="GameStepModel" Title="Acceleration" Options="AccOptions">
-                @foreach (var move in Moves)
-                {
-                    <ApexPointSeries TItem="GameStepModel" Items="move.Steps" Name="@(move.UserName)" SeriesType="SeriesType.Line" XValue="@(e => e.Time)" YValue="@(e => (decimal)e.Acceleration)" ShowDataLabels />
-                }
-            </ApexChart>
-            <ApexChart TItem="GameStepModel" Title="Velocity" Options="VecOptions">
-                @foreach (var move in Moves)
-                {
-                    <ApexPointSeries TItem="GameStepModel" Items="move.Steps" Name="@(move.UserName)" SeriesType="SeriesType.Line" XValue="@(e => e.Time)" YValue="@(e => (decimal)e.Velocity)" ShowDataLabels />
-                }
-            </ApexChart>
-            <ApexChart TItem="GameStepModel" Title="Position" Options="PosOptions">
-                @foreach (var move in Moves)
-                {
-                    <ApexPointSeries TItem="GameStepModel" Items="move.Steps" Name="@(move.UserName)" SeriesType="SeriesType.Line" XValue="@(e => e.Time)" YValue="@(e => (decimal)e.Position)" ShowDataLabels />
-                }
-            </ApexChart>
-        </MudStack>
-    </MudTabPanel>
-</MudTabs>
-
-
+                    <tr>
+                        <td><b>Time</b></td>
+                        <td><b>Force</b></td>
+                        <td><b>Acceleration</b></td>
+                        <td><b>Velocity</b></td>
+                        <td><b>Position</b></td>
+                    </tr>
+                    @foreach (GameStepModel model in MyMoves!.Steps.OrderByDescending(e => e.Time))
+                    {
+                        <tr>
+                            <td>@model.Time</td>
+                            <td>@model.Force.ToString()</td>
+                            <td>@model.Acceleration.ToString("N1")</td>
+                            <td>@model.Velocity.ToString("N1")</td>
+                            <td>@model.Position.ToString("N1")</td>
+                        </tr>
+                    }
+                </tbody>
+            </MudSimpleTable>
+        </MudTabPanel>
+        <MudTabPanel Text="Graphs">
+            @*<MudStack>
+                <MudChart ChartType="ChartType.Line" ChartSeries="AccData" ChartOptions="_accoptions"></MudChart>
+                <MudChart ChartType="ChartType.Line" ChartSeries="VecData" ChartOptions="_vecoptions"></MudChart>
+                <MudChart ChartType="ChartType.Line" ChartSeries="PosData" ChartOptions="_posoptions"></MudChart>
+            </MudStack>*@
+            <MudStack>
+                <ApexChart TItem="GameStepModel" Title="Acceleration" Options="AccOptions">
+                    @foreach (var move in Moves)
+                    {
+                        <ApexPointSeries TItem="GameStepModel" Items="move.Steps" Name="@(move.UserName)" SeriesType="SeriesType.Line" XValue="@(e => e.Time)" YValue="@(e => (decimal)e.Acceleration)" ShowDataLabels />
+                    }
+                </ApexChart>
+                <ApexChart TItem="GameStepModel" Title="Velocity" Options="VecOptions">
+                    @foreach (var move in Moves)
+                    {
+                        <ApexPointSeries TItem="GameStepModel" Items="move.Steps" Name="@(move.UserName)" SeriesType="SeriesType.Line" XValue="@(e => e.Time)" YValue="@(e => (decimal)e.Velocity)" ShowDataLabels />
+                    }
+                </ApexChart>
+                <ApexChart TItem="GameStepModel" Title="Position" Options="PosOptions">
+                    @foreach (var move in Moves)
+                    {
+                        <ApexPointSeries TItem="GameStepModel" Items="move.Steps" Name="@(move.UserName)" SeriesType="SeriesType.Line" XValue="@(e => e.Time)" YValue="@(e => (decimal)e.Position)" ShowDataLabels />
+                    }
+                </ApexChart>
+            </MudStack>
+        </MudTabPanel>
+    </MudTabs>
+}
 @code {
     [Parameter, EditorRequired] public IUser User { get; set; }
     [Parameter, EditorRequired] public PhysicsGame SelectedGame { get; set; }
@@ -101,11 +111,11 @@
     private ApexChartOptions<GameStepModel> AccOptions { get; set; } = new ApexChartOptions<GameStepModel> { Stroke = new Stroke { Curve = Curve.Stepline }, Chart = new Chart { Type = ApexCharts.ChartType.Line, Zoom=new() { AllowMouseWheelZoom=false, Enabled=false} } };
     private ApexChartOptions<GameStepModel> VecOptions { get; set; } = new ApexChartOptions<GameStepModel> { Stroke = new Stroke { Curve = Curve.Smooth }, Chart = new Chart { Type = ApexCharts.ChartType.Line, Zoom=new() { AllowMouseWheelZoom=false, Enabled=false} } };
     private ApexChartOptions<GameStepModel> PosOptions { get; set; } = new ApexChartOptions<GameStepModel> { Stroke = new Stroke { Curve = Curve.Smooth }, Chart = new Chart { Type = ApexCharts.ChartType.Line, Zoom=new() { AllowMouseWheelZoom=false, Enabled=false} } };
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
-        Refresh();
+        await Refresh();
         webhookService.OnWebhookReceived += OnWebHookReceived;
+        await TriggerRefresh();
     }
     //private string Payload { get; set; } ="";
     private void OnWebHookReceived(string body)
@@ -143,7 +153,7 @@
         }
         //Refresh();//replaced by webhook above
     }
-    private void Refresh()
+    private async Task Refresh()
     {
         PhysicsGame? game = physicsService.GetGameByID(SelectedGame.ID);
         if (game != null)
@@ -213,6 +223,7 @@
         {
             Snackbar.Add("Game not found, please wait and retry.", Severity.Error);
         }
+        await InvokeAsync(StateHasChanged);
     }
     private List<GameStepModel> RecalculateSteps(PhysicsPlayer player)
     {
