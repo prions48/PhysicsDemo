@@ -35,6 +35,10 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9BcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/prions/Coding/PhysicsDemo/PhysicsDemo/Components/Dialogs/PassCode.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9EaWFsb2dzL1Bhc3NDb2RlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/prions/Coding/PhysicsDemo/PhysicsDemo/Components/Pages/AuthStuff.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BdXRoU3R1ZmYucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 

@@ -1,6 +1,8 @@
 @using System.Text.Json
+@using MudBlazor.Charts
 @using PhysicsDemo.Data.GameData
 @using ApexCharts
+@using QRCoder
 @using Color = MudBlazor.Color
 @using PhysicsDemo.Data.WebHooks
 @inject ISnackbar Snackbar
@@ -15,6 +17,10 @@
         <MudProgressLinear Indeterminate />
         <MudText Typo="Typo.h3">Join Code: @SelectedGame.JoinCode</MudText>
         <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="Refresh">Refresh</MudButton>
+        @if (!string.IsNullOrWhiteSpace(QRCodeImg))
+        {
+            <img src="@QRCodeImg" width="150" />
+        }
     </MudStack>
 }
 else
@@ -34,6 +40,10 @@ else
         <MudIconButton Color="Positive ? Color.Info : Color.Error" Icon="@(Positive ? Icons.Material.Filled.ArrowCircleRight : Icons.Material.Filled.ArrowCircleLeft)" OnClick="AddDirection" />
         <MudText>Direction: @(Positive ? "Right" : "Left")</MudText>
         <MudText Typo="Typo.h4">@Winner</MudText>
+        @if (User is PhysicsGuestUser guest)
+        {
+            <MudText>PIN: @guest.Passcode</MudText>
+        }
         <MudButton Color="Color.Default" StartIcon="@Icons.Material.Filled.Home" Variant="Variant.Filled" OnClick="Reset">Home</MudButton>
     </MudStack>
     <MudTabs>
@@ -60,7 +70,27 @@ else
                     {
                         <tr>
                             <td>@model.Time</td>
-                            <td>@model.Force.ToString()</td>
+                            <td>
+                                @if (model.Time == MyMoves.Steps.MaxBy(e => e.Time)?.Time)
+                                {
+                                    @if (Editing)
+                                    {
+                                        <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" OnClick="SaveEditMove" />
+                                    }
+                                    else
+                                    {
+                                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Success" OnClick="EditMove" />
+                                    }
+                                }
+                                @if (Editing)
+                                {
+                                    <MudNumericField HideSpinButtons @bind-Value="model.Force" />
+                                }
+                                else
+                                {
+                                    @model.Force.ToString()
+                                }
+                            </td>
                             <td>@model.Acceleration.ToString("N1")</td>
                             <td>@model.Velocity.ToString("N1")</td>
                             <td>@model.Position.ToString("N1")</td>
@@ -113,6 +143,7 @@ else
     private ApexChartOptions<GameStepModel> PosOptions { get; set; } = new ApexChartOptions<GameStepModel> { Stroke = new Stroke { Curve = Curve.Smooth }, Chart = new Chart { Type = ApexCharts.ChartType.Line, Zoom=new() { AllowMouseWheelZoom=false, Enabled=false} } };
     protected override async Task OnInitializedAsync()
     {
+        GenerateQRCode();
         await Refresh();
         webhookService.OnWebhookReceived += OnWebHookReceived;
         await TriggerRefresh();
@@ -293,4 +324,36 @@ else
         public List<GameStepModel> Steps { get; set; } = [];
         public int MaxTurn => Steps.Count == 0 ? 0 : Steps.Select(e => e.Time).Max();
     }
+    private bool Editing { get; set; } = false;
+    private void EditMove()
+    {
+        Editing = true;
+    }
+    private async Task SaveEditMove()
+    {
+        if (MyPlayer != null && MyMoves != null)
+        {
+            var turn = MyPlayer.Turns.MaxBy(e => e.RoundNumber);
+            if (turn != null)
+            {
+                turn.TurnValue = MyMoves.Steps.MaxBy(e => e.Time)?.Force ?? 0;
+                physicsService.UpdateTurn(turn);
+                await Refresh();
+            }
+        }
+        Editing = false;
+    }
+    private string? QRCodeImg { get; set; } = null;
+    private void GenerateQRCode()
+    {
+        QRCodeGenerator qrGenerator = new QRCodeGenerator();
+        QRCodeData qrData = qrGenerator.CreateQrCode($"https://physicsdemo.azurewebsites.net/{SelectedGame.ID}",QRCodeGenerator.ECCLevel.Q);
+        using (BitmapByteQRCode qrCode = new BitmapByteQRCode(qrData))
+        {
+            byte[] qrImg = qrCode.GetGraphic(20);
+            string base64 = Convert.ToBase64String(qrImg);
+            QRCodeImg = string.Format("data:image/png;base64,{0}", base64);
+        }
+    }
+
 }

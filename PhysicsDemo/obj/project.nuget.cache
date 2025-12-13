@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "+K75VdiDLM4=",
+  "dgSpecHash": "163lhnMtHn4=",
   "success": true,
   "projectFilePath": "/Users/prions/Coding/PhysicsDemo/PhysicsDemo/PhysicsDemo.csproj",
   "expectedPackageFiles": [
@@ -68,6 +68,7 @@
     "/Users/prions/.nuget/packages/microsoft.win32.systemevents/6.0.0/microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "/Users/prions/.nuget/packages/mono.texttemplating/3.0.0/mono.texttemplating.3.0.0.nupkg.sha512",
     "/Users/prions/.nuget/packages/mudblazor/8.14.0/mudblazor.8.14.0.nupkg.sha512",
+    "/Users/prions/.nuget/packages/qrcoder/1.7.0/qrcoder.1.7.0.nupkg.sha512",
     "/Users/prions/.nuget/packages/system.clientmodel/1.1.0/system.clientmodel.1.1.0.nupkg.sha512",
     "/Users/prions/.nuget/packages/system.codedom/6.0.0/system.codedom.6.0.0.nupkg.sha512",
     "/Users/prions/.nuget/packages/system.collections.immutable/7.0.0/system.collections.immutable.7.0.0.nupkg.sha512",

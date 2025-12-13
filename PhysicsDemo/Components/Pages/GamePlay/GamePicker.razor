@@ -1,7 +1,9 @@
 @page "/{GameID:guid?}"
 @inject ISnackbar Snackbar
 @using PhysicsDemo.Data.GameData
+@using PhysicsDemo.Components.Dialogs
 @inject PhysicsService physicsService
+@inject IDialogService dialogService
 @inject UserService userService
 <PageTitle>Physics Game Play</PageTitle>
 @if (User != null)
@@ -116,7 +118,13 @@
 }
 else
 {
-    @if (GuestUser == null)
+    @if (RejoiningQR)
+    {
+        <MudTextField @bind-Value="GuestPin" Label="PIN to rejoin game" />
+        <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="Cancel">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="RejoinGuestFromQR">Rejoin Game</MudButton>
+    }
+    else if (GuestUser == null)
     {
         <MudStack Row>
             <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="Account/Login">Log In</MudButton>
@@ -165,7 +173,6 @@ else
     [CascadingParameter] public Auth0User? User { get; set; }
     [Parameter] public Guid? GameID { get; set; }
     private bool loaded = false;
-    private bool urlload = false;
     private string? PlayerName { get; set; } = null;
     List<PhysicsGame> Games { get; set; } = [];
     PhysicsGame? SelectedGame { get; set; } = null;
@@ -180,9 +187,28 @@ else
         GuestUser = new();
         Rejoin = true;
     }
-    private int activePanel { get; set; } = 0;
-    protected override void OnParametersSet()
+    private bool RejoiningQR { get; set; } = false;
+    private void RejoinGuestFromQR()
     {
+        if (SelectedGame == null || string.IsNullOrEmpty(GuestPin))
+            return;
+        List<PhysicsGuestUser> users = physicsService.GetGuestUsers(SelectedGame.Players.Where(e => e.GuestPlayer).Select(e => e.PlayerID).ToHashSet());
+        PhysicsGuestUser? user = users.FirstOrDefault(e => e.Passcode == GuestPin);
+        if (user == null)
+        {
+            Snackbar.Add("Incorrect rejoin PIN!", Severity.Error);
+            return;
+        }
+        else
+        {
+            GuestUser = user;
+            RejoiningQR = false;
+        }
+    }
+    private int activePanel { get; set; } = 0;
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
         if (!loaded && User != null)
         {
             PlayerName = User.UserName ?? User.EmailAddress ?? "Your Name";
@@ -192,11 +218,50 @@ else
             if (Games.Any(e => e.GameEnd == null))
                 activePanel = 2;
         }
-        if (GameID != null && !urlload)
+        if (GameID != null)
         {
-            SelectedGame = Games.FirstOrDefault(e => e.ID == GameID);
-            //add QR code logic here
-            urlload = true;
+            PhysicsGame? game = physicsService.GetGameByID(GameID.Value);
+            if (game != null)
+            {
+                if (User != null && game.Players.Any(e => e.PlayerID == User.UserID))
+                {
+                    //game will auto rejoin below by setting SelectedGame = game, right?
+                }
+                else if (game.Players.Count < game.NumPlayers)
+                {
+                    string pcode = "";
+                    Random r = new();
+                    for (int i = 0; i < 4; i++)
+                        pcode += r.Next(10).ToString();
+                    if (User != null && !game.Players.Any(e => e.PlayerID == User.UserID))
+                    {
+                        PhysicsPlayer newplayer = new() { GameID = game.ID, PlayerID = User.UserID, PlayerName=PlayerName, GuestPlayer=false };
+                        physicsService.CreatePlayer(newplayer);
+                        game.Players.Add(newplayer);
+                    }
+                    else
+                    {
+                        GuestUser = new() {
+                            Passcode = pcode, FirstLogin=DateTime.Now,PlayerName=$"Player {game.Players.Count+1}",UserID=Guid.NewGuid()
+                        };
+                        physicsService.CreateGuestPlayer(GuestUser);
+                        PhysicsPlayer newplayer = new() { GameID = game.ID, PlayerID = GuestUser.UserID, PlayerName=$"Player {game.Players.Count+1}", GuestPlayer=true };
+                        physicsService.CreatePlayer(newplayer);
+                        game.Players.Add(newplayer);
+                    }
+                }
+                else if (game.Players.Any(e => e.GuestPlayer))
+                {
+                    RejoiningQR = true;
+                }
+                else
+                {
+                    Snackbar.Add("That game is full!", Severity.Error);
+                }
+                //add QR code logic here
+                SelectedGame = game;
+            }
+            //StateHasChanged();
         }
     }
     private int? NumPlayers = null;
@@ -208,6 +273,7 @@ else
         GuestPin = null;
         Rejoin = false;
         GuestUser = null;
+        RejoiningQR = false;
     }
     private void CreateGame()
     {
@@ -303,7 +369,7 @@ else
                 Snackbar.Add("That game has no guest players.", Severity.Warning);
                 return;
             }
-            List<PhysicsGuestUser> users = physicsService.GetGuestUsers(players.Select(e => e.PlayerID).ToHashSet());
+            List<PhysicsGuestUser> users = physicsService.GetGuestUsers(players.Where(e => e.GuestPlayer).Select(e => e.PlayerID).ToHashSet());
             PhysicsGuestUser? user = users.FirstOrDefault(e => e.Passcode == GuestPin);
             if (user == null)
             {

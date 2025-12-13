@@ -188,6 +188,11 @@ namespace PhysicsDemo.Data.GameData
             _context.PhysicsTurns.Add(turn);
             _context.SaveChanges();
         }
+        public void UpdateTurn(PhysicsTurn turn)
+        {
+            _context.PhysicsTurns.Update(turn);
+            _context.SaveChanges();
+        }
         public void CreateDirection(PhysicsDirection direction)
         {
             _context.PhysicsDirections.Add(direction);

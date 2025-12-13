@@ -1,0 +1,21 @@
+@inject IDialogService dialogService
+
+<MudDialog>
+    <DialogContent>
+        <MudStack Row>
+            <MudTextField @bind-Value="PassCodeString" Label="Join Code" />
+            <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="Color.Default">Cancel</MudButton>
+            <MudButton OnClick="Submit" Variant="Variant.Filled" Disabled="string.IsNullOrWhiteSpace(PassCodeString)" Color="Color.Info">Submit</MudButton>
+        </MudStack>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
+    private string? PassCodeString { get; set; }
+    void Submit()
+    {
+        MudDialog.Close(DialogResult.Ok(PassCodeString));
+    }
+    void Cancel() => MudDialog.Close(DialogResult.Cancel());
+}
