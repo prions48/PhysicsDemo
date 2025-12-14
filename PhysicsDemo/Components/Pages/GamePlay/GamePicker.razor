@@ -15,6 +15,7 @@
                 <MudStack>
                     <MudTextField @bind-Value="PlayerName" Label="Your Name" />
                     <MudSelect @bind-Value="NumPlayers" Label="# Players">
+                        <MudSelectItem T="int?" Value="1">Solo</MudSelectItem>
                         <MudSelectItem T="int?" Value="2">2</MudSelectItem>
                         <MudSelectItem T="int?" Value="3">3</MudSelectItem>
                         <MudSelectItem T="int?" Value="4">4</MudSelectItem>

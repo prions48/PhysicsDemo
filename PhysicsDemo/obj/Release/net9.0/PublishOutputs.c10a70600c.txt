@@ -50,6 +50,7 @@
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/Microsoft.SqlServer.Server.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/Microsoft.Win32.SystemEvents.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/MudBlazor.dll
+/Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/QRCoder.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/System.ClientModel.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/System.Configuration.ConfigurationManager.dll
 /Users/prions/Coding/PhysicsDemo/PhysicsDemo/bin/Release/net9.0/publish/System.Drawing.Common.dll
