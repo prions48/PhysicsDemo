@@ -25,27 +25,48 @@
 }
 else
 {
-    <MudStack Row AlignItems="AlignItems.Center">
-        <MudText Style="font-weight: bold;">@SelectedGame.JoinCode</MudText>
+    <MudGrid>
+        <MudItem xs=4 sm=3 md=2 lg=1 xl=1>
+            <MudText Style="font-weight: bold;">@SelectedGame.JoinCode</MudText>
+        </MudItem>
         @if (SelectedGame.MidPoint.HasValue)
         {
-            <MudChip Color="SelectedGame.Players.Any(e => e.PassedMidpoint == true) ? Color.Info : Color.Default" T="string">Midpoint: @SelectedGame.MidPoint.ToString()</MudChip>
+            <MudItem xs=4 sm=3 md=2 lg=1 xl=1>
+                <MudChip Color="SelectedGame.Players.Any(e => e.PassedMidpoint == true) ? Color.Info : Color.Default" T="string">Midpoint: @SelectedGame.MidPoint.ToString()</MudChip>
+            </MudItem>
         }
         @if (SelectedGame.EndPoint.HasValue)
         {
-            <MudChip Color="SelectedGame.Players.Any(e => e.PassedEndpoint == true) ? Color.Success : Color.Default" T="string">Endpoint: @SelectedGame.EndPoint.ToString()</MudChip>
+            <MudItem xs=4 sm=3 md=2 lg=1 xl=1>
+                <MudChip Color="SelectedGame.Players.Any(e => e.PassedEndpoint == true) ? Color.Success : Color.Default" T="string">Endpoint: @SelectedGame.EndPoint.ToString()</MudChip>
+            </MudItem>
         }
-        <MudButton OnClick="Refresh" Color="Color.Primary" Variant="Variant.Filled">Refresh</MudButton>
+        <MudItem xs=4 sm=3 md=2 lg=1 xl=1>
+            <MudButton OnClick="Refresh" Color="Color.Primary" Variant="Variant.Filled">Refresh</MudButton>
+        </MudItem>
         @*<MudButton OnClick="TriggerRefresh" Color="Color.Secondary" Variant="Variant.Filled">Test</MudButton>*@
-        <MudIconButton Color="Positive ? Color.Info : Color.Error" Icon="@(Positive ? Icons.Material.Filled.ArrowCircleRight : Icons.Material.Filled.ArrowCircleLeft)" OnClick="AddDirection" />
-        <MudText>Direction: @(Positive ? "Right" : "Left")</MudText>
-        <MudText Typo="Typo.h4">@Winner</MudText>
+        <MudItem xs=4 sm=3 md=2 lg=1 xl=1>
+            <MudIconButton Color="Positive ? Color.Info : Color.Error" Icon="@(Positive ? Icons.Material.Filled.ArrowCircleRight : Icons.Material.Filled.ArrowCircleLeft)" OnClick="AddDirection" />
+        </MudItem>
+        <MudItem xs=4 sm=3 md=2 lg=1 xl=1>
+            <MudText>Direction: @(Positive ? "Right" : "Left")</MudText>
+        </MudItem>
+        @if (!string.IsNullOrWhiteSpace(Winner))
+        {
+            <MudItem xs=4 sm=3 md=2 lg=1 xl=1>
+                <MudText Typo="Typo.h4">@Winner</MudText>
+            </MudItem>
+        }
         @if (User is PhysicsGuestUser guest)
         {
-            <MudText>PIN: @guest.Passcode</MudText>
+            <MudItem xs=4 sm=3 md=2 lg=1 xl=1>
+                <MudText>PIN: @guest.Passcode</MudText>
+            </MudItem>
         }
-        <MudButton Color="Color.Default" StartIcon="@Icons.Material.Filled.Home" Variant="Variant.Filled" OnClick="Reset">Home</MudButton>
-    </MudStack>
+        <MudItem xs=4 sm=3 md=2 lg=1 xl=1>
+            <MudButton Color="Color.Default" StartIcon="@Icons.Material.Filled.Home" Variant="Variant.Filled" OnClick="Reset">Home</MudButton>
+        </MudItem>
+    </MudGrid>
     <MudTabs>
         <MudTabPanel Text="My Moves">
             <MudSimpleTable Striped Bordered>
@@ -53,10 +74,10 @@ else
                     <tr>
                         <td>@(TurnNumber)</td>
                         <td>
-                            <MudNumericField @bind-Value="NewForce" Label="Force" Style="width:200px;" Immediate />
+                            <MudNumericField @ref="ForceField" @bind-Value="NewForce" Label="Force" Style="width:200px;" Immediate @onkeydown="KeyPress" InputMode="InputMode.numeric" />
                         </td>
                         <td colspan="3">
-                            <MudButton Color="Color.Info" Variant="Variant.Filled" Disabled="!NewForce.HasValue || TurnNumber == MyMoves!.MaxTurn" OnClick="AddMove">Next Step</MudButton>
+                            <MudButton @ref="SubmitButton" Color="Color.Info" Variant="Variant.Filled" Disabled="!NewForce.HasValue || TurnNumber == MyMoves!.MaxTurn" OnClick="AddMove">Next Step</MudButton>
                         </td>
                     </tr>
                     <tr>
@@ -82,7 +103,7 @@ else
                                         <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Success" OnClick="EditMove" />
                                     }
                                 }
-                                @if (Editing)
+                                @if (Editing && model.Time == MyMoves.Steps.Select(e => e.Time).Max())
                                 {
                                     <MudNumericField HideSpinButtons @bind-Value="model.Force" />
                                 }
@@ -138,6 +159,8 @@ else
     private bool Positive { get; set; } = true;
     //private int DirectionFactor => Positive ? 1 : -1;
     private int? NewForce { get; set; } = null;
+    private MudNumericField<int?> ForceField { get; set; } = default!;
+    private MudButton SubmitButton { get; set; } = default!;
     private ApexChartOptions<GameStepModel> AccOptions { get; set; } = new ApexChartOptions<GameStepModel> { Stroke = new Stroke { Curve = Curve.Stepline }, Chart = new Chart { Type = ApexCharts.ChartType.Line, Zoom=new() { AllowMouseWheelZoom=false, Enabled=false} } };
     private ApexChartOptions<GameStepModel> VecOptions { get; set; } = new ApexChartOptions<GameStepModel> { Stroke = new Stroke { Curve = Curve.Smooth }, Chart = new Chart { Type = ApexCharts.ChartType.Line, Zoom=new() { AllowMouseWheelZoom=false, Enabled=false} } };
     private ApexChartOptions<GameStepModel> PosOptions { get; set; } = new ApexChartOptions<GameStepModel> { Stroke = new Stroke { Curve = Curve.Smooth }, Chart = new Chart { Type = ApexCharts.ChartType.Line, Zoom=new() { AllowMouseWheelZoom=false, Enabled=false} } };
@@ -162,6 +185,16 @@ else
                     Snackbar.Add($"Move by {payload.PlayerName}!", Severity.Info);
                 }
                 await Refresh();
+            }
+        }
+    }
+    private async Task KeyPress(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            if (NewForce.HasValue && TurnNumber > MyMoves!.MaxTurn)
+            {
+                await AddMove();
             }
         }
     }
@@ -270,6 +303,7 @@ else
     {
         if (NewForce == null || MyPlayer == null || MyMoves == null)
             return;
+        await SubmitButton.FocusAsync();
         PhysicsTurn turn = new()
         {
             GameID = SelectedGame.ID,
@@ -281,7 +315,10 @@ else
         physicsService.CreateTurn(turn);
         MyPlayer.Turns.Add(turn);
         //MyMoves.Steps.Add(new(MyMoves.Steps.Last(),turn));
+        NewForce = null;
         await TriggerRefresh();
+        await ForceField.FocusAsync();
+        StateHasChanged();
     }
     private void AddDirection()
     {
