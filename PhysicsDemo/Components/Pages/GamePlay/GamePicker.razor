@@ -129,7 +129,8 @@ else
     {
         <MudStack Row>
             <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="Account/Login">Log In</MudButton>
-            <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="PlayGuest">Play as Guest</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="PlayGuestSolo">Play Solo as Guest</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="PlayGuest">Join as Guest</MudButton>
             <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="RejoinGuest">Rejoin Game as Guest</MudButton>
         </MudStack>
     }
@@ -181,6 +182,23 @@ else
     private void PlayGuest()
     {
         GuestUser = new();
+    }
+    private void PlayGuestSolo()
+    {
+        GuestUser = new();
+        PhysicsGame game = new PhysicsGame()
+        {
+            CreatorID = GuestUser.UserID,
+            NumPlayers = 1,
+            GameStart = DateTime.Now,
+            StartPoint = StartPt,
+            MidPoint = MidPt,
+            EndPoint = EndPt
+        };
+        game.Players = [new() { GameID = game.ID, PlayerID = game.CreatorID, PlayerName="Player 1" }];
+        physicsService.CreateGame(game);
+        Games.Add(game);
+        SelectedGame = game;
     }
     private bool Rejoin { get; set; } = false;
     private void RejoinGuest()
