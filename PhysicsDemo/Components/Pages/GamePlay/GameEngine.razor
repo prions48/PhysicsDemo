@@ -1,5 +1,5 @@
-@using System.Text.Json
 @using MudBlazor.Charts
+@using System.Text.Json
 @using PhysicsDemo.Data.GameData
 @using ApexCharts
 @using QRCoder
@@ -127,24 +127,36 @@ else
                 <MudChart ChartType="ChartType.Line" ChartSeries="PosData" ChartOptions="_posoptions"></MudChart>
             </MudStack>*@
             <MudStack>
-                <ApexChart TItem="GameStepModel" Title="Acceleration" Options="AccOptions">
-                    @foreach (var move in Moves)
-                    {
-                        <ApexPointSeries TItem="GameStepModel" Items="move.Steps" Name="@(move.UserName)" SeriesType="SeriesType.Line" XValue="@(e => e.Time)" YValue="@(e => (decimal)e.Acceleration)" ShowDataLabels />
-                    }
-                </ApexChart>
-                <ApexChart TItem="GameStepModel" Title="Velocity" Options="VecOptions">
-                    @foreach (var move in Moves)
-                    {
-                        <ApexPointSeries TItem="GameStepModel" Items="move.Steps" Name="@(move.UserName)" SeriesType="SeriesType.Line" XValue="@(e => e.Time)" YValue="@(e => (decimal)e.Velocity)" ShowDataLabels />
-                    }
-                </ApexChart>
-                <ApexChart TItem="GameStepModel" Title="Position" Options="PosOptions">
-                    @foreach (var move in Moves)
-                    {
-                        <ApexPointSeries TItem="GameStepModel" Items="move.Steps" Name="@(move.UserName)" SeriesType="SeriesType.Line" XValue="@(e => e.Time)" YValue="@(e => (decimal)e.Position)" ShowDataLabels />
-                    }
-                </ApexChart>
+                <MudSelect @bind-Value="GraphSize" Label="Graph Size Setting" T="string">
+                    <MudSelectItem T="string" Value="@("100%")">Full Size</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("60%")">Large</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("40%")">Medium</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("20%")">Small</MudSelectItem>
+                </MudSelect>
+                <MudPaper Width="@GraphSize.ToString()">
+                    <ApexChart TItem="GameStepModel" Title="Acceleration" Options="AccOptions">
+                        @foreach (var move in Moves)
+                        {
+                            <ApexPointSeries TItem="GameStepModel" Items="move.Steps" Name="@(move.UserName)" SeriesType="SeriesType.Line" XValue="@(e => e.Time)" YValue="@(e => (decimal)e.Acceleration)" ShowDataLabels />
+                        }
+                    </ApexChart>
+                </MudPaper>
+                <MudPaper Width="@GraphSize.ToString()">
+                    <ApexChart TItem="GameStepModel" Title="Velocity" Options="VecOptions">
+                        @foreach (var move in Moves)
+                        {
+                            <ApexPointSeries TItem="GameStepModel" Items="move.Steps" Name="@(move.UserName)" SeriesType="SeriesType.Line" XValue="@(e => e.Time)" YValue="@(e => (decimal)e.Velocity)" ShowDataLabels />
+                        }
+                    </ApexChart>
+                </MudPaper>
+                <MudPaper Width="@GraphSize.ToString()">
+                    <ApexChart TItem="GameStepModel" Title="Position" Options="PosOptions">
+                        @foreach (var move in Moves)
+                        {
+                            <ApexPointSeries TItem="GameStepModel" Items="move.Steps" Name="@(move.UserName)" SeriesType="SeriesType.Line" XValue="@(e => e.Time)" YValue="@(e => (decimal)e.Position)" ShowDataLabels />
+                        }
+                    </ApexChart>
+                </MudPaper>
             </MudStack>
         </MudTabPanel>
     </MudTabs>
@@ -152,6 +164,7 @@ else
 @code {
     [Parameter, EditorRequired] public IUser User { get; set; }
     [Parameter, EditorRequired] public PhysicsGame SelectedGame { get; set; }
+    private string GraphSize { get; set; } = "100%";
     private List<UserMoves> Moves { get; set; } = [];
     private PhysicsPlayer? MyPlayer => SelectedGame.Players.FirstOrDefault(e => e.PlayerID == User.UserID);
     private UserMoves? MyMoves => Moves.FirstOrDefault(e => e.UserID == User.UserID);
@@ -347,7 +360,7 @@ else
                 valcount.TryAdd(direction.TurnValue,0);
                 valcount[direction.TurnValue]++;
                 annotations.Add(new() {
-                    Label = new() { Text = $"Turnaround for {player.PlayerName}", Style = new() { Background = "red"} },
+                    Label = new() { Text = $"Turnaround for {player.PlayerName}", Style = new() { Background = "white", Color="black"} },
                     X = (double)direction.TurnValue + ((valcount[direction.TurnValue]-1) * 0.1)
                 });
             }
