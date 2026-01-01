@@ -72,7 +72,7 @@ namespace PhysicsDemo.Data.GameData
             _context.SaveChanges();
             return games;
         }
-        private PhysicsGame? RecalcGame(PhysicsGame? game)
+        public PhysicsGame? RecalcGame(PhysicsGame? game)
         {
             if (game == null)
                 return game;
@@ -97,16 +97,18 @@ namespace PhysicsDemo.Data.GameData
                 _context.PhysicsGames.Update(game);
                 _context.SaveChanges();
             }
+            game.Enriched = true;
             return game;
         }
         #endregion
         public List<PhysicsGame> GetGamesByCreator(Guid creatorid)
         {
-            return EnrichGames(_context.PhysicsGames.Where(e => e.CreatorID == creatorid).ToList());
+            return _context.PhysicsGames.Where(e => e.CreatorID == creatorid).ToList();
+            //return EnrichGames(_context.PhysicsGames.Where(e => e.CreatorID == creatorid).ToList());
         }
         public List<PhysicsGame> GetGamesByUser(Guid userid)
         {
-            return EnrichGames(
+            return //EnrichGames(
                 _context.PhysicsGames
                 .Join(
                     _context.PhysicsPlayers.Where(e => e.PlayerID == userid),
@@ -116,8 +118,8 @@ namespace PhysicsDemo.Data.GameData
                 )
                 //.Where(e => e.CreatorID == userid || e.GameEnd == null)//include history or nah?
                 .Distinct()
-                .ToList()
-            );
+                .ToList();
+            //);
         }
         public List<PhysicsGame> GetOpenGames()
         {

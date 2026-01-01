@@ -1,4 +1,5 @@
 using Auth0.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using MudBlazor.Services;
@@ -36,6 +37,7 @@ builder.Services.AddDbContext<PhysicsContext>(o => o.UseSqlServer(builder.Config
 builder.Services.AddScoped<PhysicsService>();
 
 builder.Services.AddSingleton<WebHookService>();
+builder.Services.AddSingleton<CircuitHandler, CircuitTracker>();
 
 var app = builder.Build();
 

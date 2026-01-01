@@ -5,6 +5,7 @@
 @using QRCoder
 @using Color = MudBlazor.Color
 @using PhysicsDemo.Data.WebHooks
+@implements IDisposable
 @inject ISnackbar Snackbar
 @inject PhysicsService physicsService
 @inject WebHookService webhookService
@@ -183,6 +184,10 @@ else
         await Refresh();
         webhookService.OnWebhookReceived += OnWebHookReceived;
         await TriggerRefresh();
+    }
+    public void Dispose()
+    {
+        webhookService.OnWebhookReceived -= OnWebHookReceived;
     }
     //private string Payload { get; set; } ="";
     private async void OnWebHookReceived(string body)

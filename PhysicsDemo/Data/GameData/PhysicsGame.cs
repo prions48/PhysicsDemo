@@ -22,6 +22,7 @@ namespace PhysicsDemo.Data.GameData
         [NotMapped] public List<PhysicsTurn> Turns => Players.SelectMany(e => e.Turns).ToList();
         [NotMapped] public List<PhysicsTurn> CurrentTurns => Players.Where(e => e.CurrentTurn != null).Select(e => e.CurrentTurn!).ToList();
         [NotMapped] public PhysicsPlayer? Winner => Players.FirstOrDefault(e => e.PlayerID == WinningPlayerID);
+        [NotMapped] public bool Enriched { get; set; } = false;
 
     }
 }
