@@ -162,9 +162,24 @@ else
         </MudTabPanel>
     </MudTabs>
 }
+
+<MudDialog @bind-Visible="ShowPIN" Options="Options">
+    <DialogContent>
+        @if (User is PhysicsGuestUser guest)
+        {
+            <MudText>Your PIN to rejoin this game is <b>@guest.Passcode</b></MudText>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="() => ShowPIN = false">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
 @code {
     [Parameter, EditorRequired] public IUser User { get; set; }
     [Parameter, EditorRequired] public PhysicsGame SelectedGame { get; set; }
+    [Parameter] public bool ShowPIN { get; set; } = false;
+    private DialogOptions Options { get; set; } = new() { CloseOnEscapeKey = true };
     private string GraphSize { get; set; } = "100%";
     private List<UserMoves> Moves { get; set; } = [];
     private PhysicsPlayer? MyPlayer => SelectedGame.Players.FirstOrDefault(e => e.PlayerID == User.UserID);
@@ -401,6 +416,8 @@ else
     private string? QRCodeImg { get; set; } = null;
     private void GenerateQRCode()
     {
+        if (SelectedGame.NumPlayers <= SelectedGame.Players.Count)
+            return;
         QRCodeGenerator qrGenerator = new QRCodeGenerator();
         QRCodeData qrData = qrGenerator.CreateQrCode($"https://physicsdemo.azurewebsites.net/{SelectedGame.ID}",QRCodeGenerator.ECCLevel.Q);
         using (BitmapByteQRCode qrCode = new BitmapByteQRCode(qrData))

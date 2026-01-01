@@ -5,6 +5,7 @@
 @inject PhysicsService physicsService
 @inject IDialogService dialogService
 @inject UserService userService
+@inject NavigationManager navManager
 <PageTitle>Physics Game Play</PageTitle>
 @if (User != null)
 {
@@ -55,7 +56,7 @@
                         <MudTd>
                             @if (context.GameEnd == null)
                             {
-                                <MudIconButton Icon="@Icons.Material.TwoTone.PlayCircle" OnClick="() => SelectedGame = context" Color="Color.Info" />
+                                <MudIconButton Icon="@Icons.Material.TwoTone.PlayCircle" OnClick="() => SelectGame(context)" Color="Color.Info" />
                             }
                         </MudTd>
                     </RowTemplate>
@@ -91,12 +92,12 @@
                         <MudTd>
                             @if (context.GameEnd == null)
                             {
-                                <MudIconButton Icon="@Icons.Material.TwoTone.PlayCircle" OnClick="() => SelectedGame = context" Color="Color.Info" />
+                                <MudIconButton Icon="@Icons.Material.TwoTone.PlayCircle" OnClick="() => SelectGame(context)" Color="Color.Info" />
                                 <MudIconButton Icon="@Icons.Material.TwoTone.Cancel" OnClick="() => CloseGame(context)" Color="Color.Warning" />
                             }
                             else if (ShowCompleted)
                             {
-                                <MudIconButton Icon="@Icons.Material.TwoTone.DataThresholding" OnClick="() => SelectedGame = context" Color="Color.Info" />
+                                <MudIconButton Icon="@Icons.Material.TwoTone.DataThresholding" OnClick="() => SelectGame(context)" Color="Color.Info" />
                             }
                         </MudTd>
                     </RowTemplate>
@@ -162,7 +163,7 @@ else
         }
         else if (GuestUser != null)
         {
-            <GameEngine SelectedGame="SelectedGame" User="GuestUser" />
+            <GameEngine SelectedGame="SelectedGame" User="GuestUser" ShowPIN="true" />
         }
         else
         {
@@ -199,6 +200,7 @@ else
         physicsService.CreateGame(game);
         Games.Add(game);
         SelectedGame = game;
+        navManager.NavigateTo($"/{game.ID}");
     }
     private bool Rejoin { get; set; } = false;
     private void RejoinGuest()
@@ -237,7 +239,15 @@ else
             if (Games.Any(e => e.GameEnd == null))
                 activePanel = 2;
         }
-        if (GameID != null)
+    }
+    private void SelectGame(PhysicsGame game)
+    {
+        SelectedGame = game;
+        navManager.NavigateTo($"/{game.ID}");
+    }
+    protected override void OnParametersSet()
+    {
+        if (GameID != null && SelectedGame == null)
         {
             PhysicsGame? game = physicsService.GetGameByID(GameID.Value);
             if (game != null)
@@ -277,7 +287,6 @@ else
                 {
                     Snackbar.Add("That game is full!", Severity.Error);
                 }
-                //add QR code logic here
                 SelectedGame = game;
             }
             //StateHasChanged();
@@ -311,6 +320,7 @@ else
         physicsService.CreateGame(game);
         Games.Add(game);
         SelectedGame = game;
+        navManager.NavigateTo($"/{game.ID}");
     }
     private string? JoinCode { get; set; } = null;
     private void JoinGame()
@@ -336,6 +346,7 @@ else
             physicsService.CreatePlayer(newplayer);
             game.Players.Add(newplayer);
             SelectedGame = game;
+            navManager.NavigateTo($"/{game.ID}");
         }
     }
     private string? GuestPin { get; set; } = null;
@@ -369,6 +380,7 @@ else
             physicsService.CreatePlayer(newplayer);
             game.Players.Add(newplayer);
             SelectedGame = game;
+            navManager.NavigateTo($"/{game.ID}");
         }
     }
     private void RejoinGameAsGuest()
@@ -399,6 +411,7 @@ else
             {
                 GuestUser = user;
                 SelectedGame = game;
+                navManager.NavigateTo($"/{game.ID}");
                 Rejoin = false;
             }
             
