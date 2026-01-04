@@ -70,7 +70,7 @@ else
     </MudGrid>
     <MudTabs>
         <MudTabPanel Text="My Moves">
-            <MudSimpleTable Striped Bordered>
+            <MudSimpleTable Bordered>
                 <tbody>
                     <tr>
                         <td>@(TurnNumber)</td>
@@ -90,7 +90,7 @@ else
                     </tr>
                     @foreach (GameStepModel model in MyMoves!.Steps.OrderByDescending(e => e.Time))
                     {
-                        <tr>
+                        <tr style="@($"background-color: {model.CalcColor};")">
                             <td>@model.Time</td>
                             <td>
                                 @if (model.Time == MyMoves.Steps.MaxBy(e => e.Time)?.Time)
@@ -383,6 +383,20 @@ else
                     Label = new() { Text = $"Turnaround for {player.PlayerName}", Style = new() { Background = "white", Color="black"} },
                     X = (double)direction.TurnValue + ((valcount[direction.TurnValue]-1) * 0.1)
                 });
+                if (player.PlayerID != User.UserID || MyMoves == null)
+                    continue;
+                int i = 0;
+                while (i < MyMoves.Steps.Count)
+                {
+                    if (MyMoves.Steps[i].Time == direction.TurnValue)
+                    {
+                        for (int j = i; j < MyMoves.Steps.Count; j++)
+                        {
+                            MyMoves.Steps[j].Reverse = !MyMoves.Steps[j].Reverse;
+                        }
+                    }
+                    i++;
+                }
             }
         }
         AccOptions.Annotations = new() { Xaxis = annotations };

@@ -10,6 +10,8 @@ public class GameStepModel
     public List<double> DoubleAcc => [Acceleration, Acceleration];
     public double Velocity { get; set; }
     public double Position { get; set; }
+    public bool Reverse { get; set; } = false;
+    public string CalcColor => Reverse ? "#ffeeee" : "#eeeeff";
     public GameStepModel(GameStepModel model, int force, double mass, int t)
     {
         Time = model.Time + t;
