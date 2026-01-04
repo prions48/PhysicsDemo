@@ -1,6 +1,9 @@
 ﻿@inherits LayoutComponentBase
+@using PhysicsDemo.Components.Dialogs
 @using PhysicsDemo.Components.Pages
 @using PhysicsDemo.Data.Users
+@inject ISnackbar Snackbar
+@inject IDialogService dialogService
 @inject AuthenticationStateProvider authProvider
 @inject UserService userService
 <MudThemeProvider @bind-IsDarkMode="DarkMode" />
@@ -12,6 +15,7 @@
     <MudAppBar Color="Color.Info">
         @*<MudIconButton Icon="@Icons.Material.TwoTone.Menu" OnClick="MenuToggle" />*@
         <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.TwoTone.Email" Color="Color.Warning" OnClick="OpenEmailDialog" />
         @if (!String.IsNullOrEmpty(UserName))
         {
             <MudText>Welcome, @UserName!</MudText>
@@ -89,5 +93,30 @@
     {
         DarkMode = !DarkMode;
         StateHasChanged();
+    }
+    DateTime? LastSendEmail { get; set; } = null;
+    private async Task OpenEmailDialog()
+    {
+        if (User == null && LastSendEmail.HasValue && LastSendEmail.Value.AddMinutes(1) > DateTime.Now)
+        {
+            Snackbar.Add("Email rate limit hit.", Severity.Warning);
+            return;
+        }
+        var options = new DialogOptions()
+        {
+            CloseOnEscapeKey = true,
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true
+        };
+        var parameters = new DialogParameters();
+        parameters.Add(nameof(FeedbackDialog.UserName), User?.UserName);
+        parameters.Add(nameof(FeedbackDialog.UserEmail), User?.EmailAddress);
+        var dialog = dialogService.ShowAsync<FeedbackDialog>("Submit Feedback", parameters, options);
+        var result = await dialog;
+        var result2 = await result.Result;
+        if (result2?.Canceled == false && result2.Data is bool sent)
+        {
+            LastSendEmail = DateTime.Now;
+        }
     }
 }

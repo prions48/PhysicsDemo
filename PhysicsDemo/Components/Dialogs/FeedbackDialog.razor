@@ -1,0 +1,81 @@
+@using PhysicsDemo.Data.Email
+@inject IDialogService dialogService
+@inject ISnackbar Snackbar
+@inject EmailService emailService
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="UserName" Label="Your name" />
+        <MudTextField @bind-Value="UserEmail" Label="Your contact info" />
+        <MudSelect @bind-Value="Subject" Label="Subject" Clearable="false">
+            <MudSelectItem Value="@("Game Feedback")" />
+            <MudSelectItem Value="@("Bug Report")" />
+            <MudSelectItem Value="@("Science Question")" />
+            <MudSelectItem Value="@("Business Interest: Nonprofit Education")" />
+            <MudSelectItem Value="@("Business Interest: Web App")" />
+        </MudSelect>
+        <MudTextField Lines="4" @bind-Value="Body" Label="Write message here" Immediate />
+        <MudText><i>Email sending to @(EmailSendTo())</i></MudText>
+    </DialogContent>
+    <DialogActions>
+        @if (Sending)
+        {
+            <MudProgressLinear Indeterminate />
+        }
+        else
+        {
+            <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="Color.Default">Cancel</MudButton>
+            <MudButton OnClick="Submit" Variant="Variant.Filled" Disabled="string.IsNullOrWhiteSpace(Body) || string.IsNullOrWhiteSpace(UserName)" Color="Color.Info">Send Email</MudButton>
+        }
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
+    [Parameter] public string? UserName { get; set; }
+    [Parameter] public string? UserEmail { get; set; }
+    private string Subject { get; set; } = "Game Feedback";
+    private string? Body { get; set; }
+    private bool Sending { get; set; } = false;
+    private async Task Submit()
+    {
+        Sending = true;
+        await Task.Delay(1);
+        var result = await emailService.SendEmail(EmailSendTo(),Subject,(Body??"")+$"<p>Sent by {UserName} {(string.IsNullOrEmpty(UserEmail)?"":$" contact info {UserEmail}")}</p>");
+        if (result == "Succeeded")
+        {
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        else
+        {
+            Snackbar.Add(result, Severity.Error);
+            Sending = false;
+        }
+    }
+    void Cancel() => MudDialog.Close(DialogResult.Cancel());
+    private string EmailSendTo()
+    {
+        if (Subject == "Bug Report" || Subject == "Business Interest: Web App")
+            return "prions48@gmail.com";
+        return "hello@rootalpha.org";
+    }
+
+    /*
+        var options = new DialogOptions()
+        {
+            CloseOnEscapeKey = true,
+            MaxWidth = MaxWidth.Medium
+        };
+        var parameters = new DialogParameters();
+        parameters.Add(nameof(ConfirmDialog.Message), $"Delete the topic \"{topic.TopicName}\"?");
+        parameters.Add(nameof(ConfirmDialog.ButtonText), "Yes, Delete");
+        parameters.Add(nameof(ConfirmDialog.ButtonColor), Color.Error);
+        var dialog = dialogService.ShowAsync<ConfirmDialog>("Confirm Delete?", parameters, options);
+        var result = await dialog;
+        var result2 = await result.Result;
+        if (result2?.Canceled == false)
+        {
+            Topics.Remove(topic);
+            testService.DeleteTopic(topic);
+        }
+    */
+}
